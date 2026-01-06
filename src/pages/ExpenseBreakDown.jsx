@@ -56,7 +56,7 @@ function BreakdownRow({ label, value }) {
   return (
     <>
     <button
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/insights')}
         className="flex items-center gap-2 text-zinc-400 hover:text-white " style={{margin:'30px'}}
       >
         <ArrowLeft size={18} />

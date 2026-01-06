@@ -224,7 +224,9 @@ const [data,setData]=useState({})
      <div className='home-bottom'><div className="p-6 bg-black flex justify-center items-start">
         <FinanceCard />
       </div>
-      <div style={{display:'flex',justifyContent:'center'}}><button
+      
+      <div style={{display:'flex',justifyContent:'center'}}>
+        <button
   onClick={() => navigate('/debts')}
   className="
     mt-6
