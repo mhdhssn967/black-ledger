@@ -1,0 +1,31 @@
+.home-ui{
+    margin-top: 40px;
+    position: fixed;
+    top: 20px;
+    padding: 20px;
+    z-index: 1;
+    opacity: 0.3;
+    left: 20px;
+}
+.home-one{
+    display:'flex';
+    flex-direction: column;
+}
+.home-bottom{
+    position: fixed;
+    bottom: 20px;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.nav{
+
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+}

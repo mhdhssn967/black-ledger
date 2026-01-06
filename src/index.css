@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+*{
+    margin: 0px;
+    font-family: "Google Sans Flex", sans-serif;
+}
+input{
+    margin-top: 5px;
+}
+body{
+    background-color: black;
+}
