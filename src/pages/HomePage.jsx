@@ -114,6 +114,7 @@ const [data,setData]=useState({})
             <span className="text-[25vw] font-extrabold tracking-tight text-white/80" style={{textWrap:'nowrap'}}>
               {/* <h3 className="text-[19vw]">Hi</h3> */}
                 {data?.profile?.name}
+                <p style={{fontStyle:'italic',fontWeight:'200',fontSize:'20px',marginTop:'-30px'}}>{data?.profile?.title}</p>
             </span>
             <br />
             {/* <span className="mt-[-2rem] text-xl tracking-widest text-white/80 uppercase">

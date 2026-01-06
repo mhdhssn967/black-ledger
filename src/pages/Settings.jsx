@@ -81,8 +81,8 @@ export default function Settings() {
       </button>
 
       {/* Background */}
-      <div className="fixed inset-0 flex justify-center items-center pointer-events-none">
-        <span className="text-[16vw] font-extrabold text-white/5">
+      <div >
+        <span className="text-[30px] font-extrabold text-white/5">
           SETTINGS
         </span>
       </div>
