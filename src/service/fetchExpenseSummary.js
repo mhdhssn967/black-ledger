@@ -2,8 +2,8 @@
 import { fetchExpenses } from './expenseService'
 
 // Group & summarize expenses
-export const getExpenseSummary = async (filterMonth) => {
-  const all = await fetchExpenses() // all expenses sorted desc
+export const getExpenseSummary = async (filterMonth,userId) => {
+  const all = await fetchExpenses(userId) // all expenses sorted desc
 
   const filtered = filterMonth
     ? all.filter(exp => {

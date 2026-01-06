@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getExpenseSummary } from '../service/fetchExpenseSummary'
 import {
     ArrowLeft,
@@ -10,8 +10,10 @@ import {
   X
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../context/UserContext'
 export default function ExpenseBreakdown() {
   const [monthFilter, setMonthFilter] = useState('')
+  const USER_ID = useContext(UserContext)
   const [summary, setSummary] = useState({
     total: 0,
     byCategory: {},
@@ -22,11 +24,11 @@ export default function ExpenseBreakdown() {
 const navigate = useNavigate()
   useEffect(() => {
     loadSummary()
-  }, [monthFilter])
+  }, [monthFilter,USER_ID])
 
   const loadSummary = async () => {
-    const data = await getExpenseSummary(monthFilter)
-    setSummary(data)
+   if(USER_ID.userId){ const data = await getExpenseSummary(monthFilter,USER_ID.userId)
+    setSummary(data)}
   }
 function Section({ title, icon: Icon, children }) {
   return (

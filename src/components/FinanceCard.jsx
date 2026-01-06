@@ -70,8 +70,10 @@ export default function FinanceCard() {
           <User size={16} className="text-zinc-400" />
           <p className="font-semibold">{data?.profile?.name}</p>
         </div>
-
-        <button
+<div className="absolute -bottom-16 -right-16 w-40 h-40 bg-gray-500 rounded-full opacity-10 rotate-45"></div>
+      <div className="absolute -top-20 -left-10 w-56 h-56 bg-gray-500 rounded-full opacity-10 rotate-12"></div>
+   
+        <button style={{zIndex:'100',cursor:'pointer'}}
           onClick={() => navigate('/insights')}
           className="flex items-center gap-1 text-sm bg-black text-emerald-400 rounded p-2 hover:text-emerald-300 transition"
         >
@@ -80,8 +82,6 @@ export default function FinanceCard() {
       </div>
 
       {/* Decorative shapes */}
-      <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-gray-500 rounded-full opacity-10 rotate-45"></div>
-      <div className="absolute -top-20 -left-10 w-56 h-56 bg-gray-500 rounded-full opacity-10 rotate-12"></div>
-    </div>
+       </div>
   )
 }
