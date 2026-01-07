@@ -141,13 +141,27 @@ const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
 
       {/* 🔹 LIST */}
       <div className="space-y-8">
-  {Object.entries(groupedExpenses).map(([month, monthExpenses]) => (
+  {Object.entries(groupedExpenses).map(([month, monthExpenses]) => {
+  const monthTotal = monthExpenses.reduce(
+    (sum, exp) => sum + Number(exp.amount || 0),
+    0
+  )
+
+  return (
     <div key={month}>
 
       {/* 🔹 Month Header */}
-      <h2 className="text-sm font-semibold text-emerald-400 mb-3 tracking-wide" style={{marginTop:'20px'}}>
-        {month}
-      </h2>
+      <div className="flex justify-between items-center mb-3 mt-5" style={{margin:'20px 10px'}}>
+  <h2 className="text-sm font-semibold text-emerald-400 tracking-wide">
+    {month}
+  </h2>
+
+  <div className="flex items-center gap-1 text-red-400 font-semibold text-md">
+    <IndianRupee size={14} />
+    {monthTotal.toLocaleString()}
+  </div>
+</div>
+
 
       {/* 🔹 Expenses */}
       <div className="space-y-3">
@@ -176,7 +190,7 @@ const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
         ))}
       </div>
     </div>
-  ))}
+  )})}
 </div>
 
 

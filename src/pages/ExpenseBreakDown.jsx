@@ -3,6 +3,7 @@ import { getExpenseSummary } from '../service/fetchExpenseSummary'
 import {
     ArrowLeft,
   BarChart2,
+  ChartAreaIcon,
   CreditCard,
   IndianRupee,
   Tag,
@@ -56,7 +57,7 @@ function BreakdownRow({ label, value }) {
   return (
     <>
     <button
-        onClick={() => navigate('/insights')}
+        onClick={() => navigate('/')}
         className="flex items-center gap-2 text-zinc-400 hover:text-white " style={{margin:'30px'}}
       >
         <ArrowLeft size={18} />
@@ -85,11 +86,14 @@ function BreakdownRow({ label, value }) {
           </div>
         
           {/* Total */}
-          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-6"style={{marginBottom:'10px'}}>
-            <p className="text-sm text-zinc-400">Total Spent</p>
-            <h2 className="text-3xl font-extrabold text-emerald-400">
-              ₹{summary.total.toLocaleString()}
-            </h2>
+          <div className="flex justify-between bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-6"style={{marginBottom:'10px'}}>
+            <div>
+              <p className="text-sm text-zinc-400">Total Spent</p>
+              <h2 className="text-3xl font-extrabold text-emerald-400">
+                ₹{summary.total.toLocaleString()}
+              </h2>
+            </div>
+            <button className='bg-emerald-400 p-4 pt-3 rounded-2xl'><ChartAreaIcon/></button>
           </div>
         
           {/* ➤ Category Breakdown */}

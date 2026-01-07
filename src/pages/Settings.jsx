@@ -1,10 +1,11 @@
 // src/pages/Settings.jsx
 import { useState, useEffect, useContext } from 'react'
-import { Plus, Trash2, User, IndianRupee, ArrowLeft } from 'lucide-react'
+import { Plus, Trash2, User, IndianRupee, ArrowLeft, LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '../../firebaseConfig'
 import { UserContext } from '../context/UserContext'
+import { logoutUser } from '../service/services'
 
 export default function Settings() {
   const USER_ID = useContext(UserContext) // 🔥 replace later with auth uid
@@ -69,22 +70,38 @@ export default function Settings() {
     await setDoc(ref, updatedData)
   }
 
+
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser()
+      navigate('/login') // or home page
+    } catch (err) {
+      alert('Failed to logout')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10 font-premium">
 
-      <button
-        onClick={() => navigate('/')}
-        className="flex items-center gap-2 text-zinc-400 hover:text-white " style={{marginBottom:'30px'}}
-      >
-        <ArrowLeft size={18} />
-        Back
-      </button>
+      <div style={{display:'flex',justifyContent:'space-between'}}>
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-zinc-400 hover:text-white " 
+        >
+          <ArrowLeft size={18} />
+          Back
+        </button>
+        <button onClick={handleLogout}><LogOut/></button>
+      </div>
 
       {/* Background */}
       <div >
-        <span className="text-[30px] font-extrabold text-white/5">
+        
+        <span className="text-[30px] font-extrabold text-white/60">
           SETTINGS
         </span>
+        
       </div>
 
       <div className="relative z-10 max-w-xl mx-auto space-y-10">

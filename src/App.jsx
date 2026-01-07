@@ -6,6 +6,7 @@ import DebtPage from './pages/DebtPage'
 import ExpenseBreakdown from './pages/ExpenseBreakDown'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
+import ExpenseBreakdownCharts from './pages/ExpenseBreakDownCHarts'
 
 function App() {
   const userId = localStorage.getItem('userId')
@@ -63,6 +64,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ExpenseBreakdown />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/expensebreakdowncharts"
+        element={
+          <ProtectedRoute>
+            <ExpenseBreakdownCharts />
           </ProtectedRoute>
         }
       />

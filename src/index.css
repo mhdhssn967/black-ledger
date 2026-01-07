@@ -10,3 +10,13 @@ input{
 body{
     background-color: black;
 }
+.today{
+    position: fixed;
+    bottom: 650px;
+    width: 100vw;
+    z-index: 1;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-left: 10px;
+}

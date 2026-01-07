@@ -9,6 +9,7 @@ import withReactContent from 'sweetalert2-react-content'
 import FinanceCard from '../components/FinanceCard'
 import { UserContext } from '../context/UserContext'
 import { getFinanceSummary } from '../service/getFinanceSummary'
+import TodayExpenseCard from '../components/TodayExpenseCard'
 
 const MySwal = withReactContent(Swal)
 
@@ -96,6 +97,7 @@ const [data,setData]=useState({})
 
   return (
     <div style={{marginBottom:'20px'}}>
+      <TodayExpenseCard/>
       <div className="relative bg-black text-white flex items-center justify-center px-6 overflow-hidden">
       <div className='nav'>
         <img src="/logo.png" width={"150px"} alt="" />
