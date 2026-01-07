@@ -75,7 +75,7 @@ export default function ExpenseCharts() {
         </div>
 
         {/* Total */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-8">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-8" style={{marginTop:'10px'}}>
           <p className="text-sm text-zinc-400">Total Spent</p>
           <h2 className="text-3xl font-extrabold text-emerald-400">
             ₹{summary.total.toLocaleString()}

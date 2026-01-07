@@ -91,7 +91,7 @@ function BreakdownRow({ label, value }) {
           </div>
         
           {/* Total */}
-          <div className="flex justify-between bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-6"style={{marginBottom:'10px'}}>
+          <div className="flex justify-between bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-6"style={{marginTop:'10px',marginBottom:'20px'}}>
             <div>
               <p className="text-sm text-zinc-400">Total Spent</p>
               <h2 className="text-3xl font-extrabold text-emerald-400">
