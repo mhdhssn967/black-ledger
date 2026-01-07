@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import { IndianRupee, Calendar } from 'lucide-react'
 import { fetchExpenses } from '../service/expenseService'
 import { UserContext } from '../context/UserContext'
 
@@ -40,11 +39,11 @@ export default function TodayExpenseCard() {
   }
 
   return (
-    <div className='today'><p style={{color:'white'}}>Todays Spend</p>
+    <div className='today text-sm' ><p className='text-zinc-300'> Today's Spend</p>
       {loading ? (
-        <p className="text-zinc-500 text-sm">Calculating…</p>
+        <p className="text-zinc-500 ">Calculating…</p>
       ) : (
-        <p className="text-2xl font-bold text-emerald-400">
+        <p className="text-sm font-bold text-red-500">
           ₹{total.toLocaleString()}
         </p>
       )}
