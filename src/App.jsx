@@ -2,11 +2,11 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import Settings from './pages/Settings'
 import Insights from './pages/Insights'
-import DebtPage from './pages/DebtPage'
 import ExpenseBreakdown from './pages/ExpenseBreakDown'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 import ExpenseCharts from './pages/ExpenseCharts'
+import MainDebtPage from './pages/MainDebtPage'
 
 function App() {
   const userId = localStorage.getItem('userId')
@@ -54,7 +54,7 @@ function App() {
         path="/debts"
         element={
           <ProtectedRoute>
-            <DebtPage />
+            <MainDebtPage />
           </ProtectedRoute>
         }
       />

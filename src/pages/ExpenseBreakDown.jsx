@@ -63,7 +63,7 @@ function BreakdownRow({ label, value }) {
     {loading&&<TriangleLoader/>}
     <button
         onClick={() => navigate('/')}
-        className="flex items-center gap-2 text-zinc-400 hover:text-white " style={{margin:'30px'}}
+        className="flex items-center gap-2 text-zinc-400 hover:text-white " style={{margin:'10px'}}
       >
         <ArrowLeft size={18} />
         Back
@@ -71,7 +71,7 @@ function BreakdownRow({ label, value }) {
 
         <div className="min-h-screen bg-black text-white px-5 py-6">
            {/* Title + Month Dropdown */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 gap-6">
             <h1 className="text-xl font-semibold text-white" style={{marginBottom:'10px'}}>
               Expense Breakdown
             </h1>

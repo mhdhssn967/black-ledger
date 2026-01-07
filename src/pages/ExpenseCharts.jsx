@@ -55,7 +55,7 @@ export default function ExpenseCharts() {
         Back
       </button>
 
-      <div className="min-h-screen bg-black text-white px-5 pb-10">
+      <div className="min-h-screen bg-black text-white px-5 pb-10" style={{display:'flex',flexDirection:'column',gap:'30px'}}>
         {/* Header */}
         <div className="flex justify-between items-center mb-6" style={{margin:'10px'}}>
           <h1 className="text-xl font-semibold">Expense Analysis</h1>

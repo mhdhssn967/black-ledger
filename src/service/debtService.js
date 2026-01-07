@@ -6,7 +6,8 @@ import {
   where,
   updateDoc,
   doc,
-  serverTimestamp
+  serverTimestamp,
+  orderBy
 } from 'firebase/firestore'
 import { db } from '../../firebaseConfig'
 
@@ -51,4 +52,48 @@ export const clearDebt = async (debtId,USER_ID) => {
       status: 'cleared'
     }
   )
+}
+
+
+export const saveReceivable = async (receivable, USER_ID) => {
+  await addDoc(
+    collection(db, 'users', USER_ID, 'receivables'),
+    {
+      amount: Number(receivable.amount),
+      owedBy: receivable.owedBy,
+      dueDate: receivable.dueDate,
+      status: 'pending',
+      createdAt: serverTimestamp()
+    }
+  )
+}
+
+
+export const fetchPendingReceivables = async USER_ID => {
+  const q = query(
+    collection(db, 'users', USER_ID, 'receivables'),
+    where('status', '==', 'pending'),
+    orderBy('createdAt', 'desc')
+  )
+
+  const snapshot = await getDocs(q)
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }))
+}
+
+export const clearReceivable = async (receivableId, USER_ID) => {
+  const ref = doc(
+    db,
+    'users',
+    USER_ID,
+    'receivables',
+    receivableId
+  )
+
+  await updateDoc(ref, {
+    status: 'cleared'
+  })
 }

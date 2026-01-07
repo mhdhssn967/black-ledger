@@ -87,7 +87,7 @@ const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
     <div className="max-w-xl mx-auto px-4 pb-10">
 {loading&&<TriangleLoader/>}
       {/* 🔹 HEADING */}
-      <h1 className="text-xl font-semibold text-white mb-2">
+      <h1 className="text-xl font-semibold text-white mb-2" style={{marginBottom:'5px'}}>
         Expenses
       </h1>
      {/* 🔍 FILTERS */}

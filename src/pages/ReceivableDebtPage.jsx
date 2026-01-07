@@ -9,61 +9,62 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import {
-  fetchPendingDebts,
-  saveDebt,
-  clearDebt
+  fetchPendingReceivables,
+  saveReceivable,
+  clearReceivable
 } from '../service/debtService'
 import { UserContext } from '../context/UserContext'
 import TriangleLoader from '../components/TriangleLoader'
 
-export default function DebtPage() {
-    const user_id=useContext(UserContext)
+export default function ReceivableDebtPage() {
+  const user_id = useContext(UserContext)
   const navigate = useNavigate()
 
-  const [debts, setDebts] = useState([])
+  const [receivables, setReceivables] = useState([])
   const [showModal, setShowModal] = useState(false)
-  const [loading,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true)
 
-  const [newDebt, setNewDebt] = useState({
+  const [newReceivable, setNewReceivable] = useState({
     amount: '',
-    owedTo: '',
+    owedBy: '',
     dueDate: ''
   })
 
-  /* 🔄 LOAD DEBTS */
+  /* 🔄 LOAD RECEIVABLES */
   useEffect(() => {
-    if(user_id.userId)
-    {loadDebts()}
+    if(user_id.userId){loadReceivables()}
   }, [user_id])
 
-  const loadDebts = async () => {
-    const data = await fetchPendingDebts(user_id.userId)
-    setDebts(data)
+  const loadReceivables = async () => {
+    const data = await fetchPendingReceivables(user_id.userId)
+    setReceivables(data)
     setLoading(false)
   }
 
-  const totalDebt = debts.reduce(
-    (sum, d) => sum + Number(d.amount),
+  const totalReceivable = receivables.reduce(
+    (sum, r) => sum + Number(r.amount),
     0
   )
 
-  const addDebt = async () => {
-    if (!newDebt.amount || !newDebt.owedTo || !newDebt.dueDate) return
+  const addReceivable = async () => {
+    if (!newReceivable.amount || !newReceivable.owedBy || !newReceivable.dueDate)
+      return
 
-    await saveDebt(newDebt,user_id.userId)
-    setNewDebt({ amount: '', owedTo: '', dueDate: '' })
+    await saveReceivable(newReceivable, user_id.userId)
+    setNewReceivable({ amount: '', owedBy: '', dueDate: '' })
     setShowModal(false)
-    loadDebts()
+    loadReceivables()
   }
 
-  const markCleared = async id => {
-    await clearDebt(id,user_id.userId)
-    loadDebts()
+  const markReceived = async id => {
+    await clearReceivable(id, user_id.userId)
+    loadReceivables()
   }
 
   return (
     <>
-    {loading&&<TriangleLoader/>}
+      {loading && <TriangleLoader />}
+
       <button
         onClick={() => navigate('/')}
         className="flex items-center gap-2 text-zinc-400 hover:text-white"
@@ -74,48 +75,47 @@ export default function DebtPage() {
       </button>
 
       <div className="min-h-screen bg-black text-white px-5 py-6">
-
-        <h1 className="text-xl font-semibold mb-6">
-          My Debts
+        <h1 className="text-xl font-semibold mb-6" style={{marginBottom:'20px'}}>
+          Money Owed To Me
         </h1>
 
         {/* TOTAL */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-8"style={{marginTop:'10px'}}>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-8">
           <p className="text-sm text-zinc-400 mb-1">
-            Total Debt
+            Total Receivable
           </p>
           <div className="flex items-center text-3xl font-bold text-emerald-400">
             <IndianRupee size={28} />
-            {totalDebt}
+            {totalReceivable}
           </div>
         </div>
 
         {/* LIST */}
         <div className="space-y-4">
-          {debts.map(debt => (
+          {receivables.map(item => (
             <div style={{marginTop:'10px'}}
-              key={debt.id}
+              key={item.id}
               className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4 flex justify-between items-center"
             >
               <div className="space-y-1">
                 <p className="font-medium">
-                  {debt.owedTo}
+                  {item.owedBy}
                 </p>
                 <p className="text-xs text-zinc-400 flex items-center gap-1">
                   <Calendar size={12} />
-                  Due {new Date(debt.dueDate).toDateString()}
+                  Due {new Date(item.dueDate).toDateString()}
                 </p>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1 font-semibold text-red-400">
+                <div className="flex items-center gap-1 font-semibold text-emerald-400">
                   <IndianRupee size={16} />
-                  {debt.amount}
+                  {item.amount}
                 </div>
 
-                {/* ✔ CLEAR */}
+                {/* ✔ RECEIVED */}
                 <button
-                  onClick={() => markCleared(debt.id)}
+                  onClick={() => markReceived(item.id)}
                   className="text-emerald-400 hover:text-emerald-300"
                 >
                   <Check size={18} />
@@ -137,7 +137,6 @@ export default function DebtPage() {
         {showModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
             <div className="bg-zinc-900 rounded-2xl p-6 w-full max-w-sm relative">
-
               <button
                 onClick={() => setShowModal(false)}
                 className="absolute top-4 right-4 text-zinc-400"
@@ -146,45 +145,54 @@ export default function DebtPage() {
               </button>
 
               <h2 className="text-lg font-semibold mb-4">
-                Add New Debt
+                Add Receivable
               </h2>
 
               <div className="space-y-3">
                 <input
                   type="number"
                   placeholder="Amount"
-                  value={newDebt.amount}
+                  value={newReceivable.amount}
                   onChange={e =>
-                    setNewDebt({ ...newDebt, amount: e.target.value })
+                    setNewReceivable({
+                      ...newReceivable,
+                      amount: e.target.value
+                    })
                   }
                   className="w-full bg-zinc-800 rounded-xl px-4 py-3 outline-none"
                 />
 
                 <input
                   type="text"
-                  placeholder="Owed to"
-                  value={newDebt.owedTo}
+                  placeholder="Owed by"
+                  value={newReceivable.owedBy}
                   onChange={e =>
-                    setNewDebt({ ...newDebt, owedTo: e.target.value })
+                    setNewReceivable({
+                      ...newReceivable,
+                      owedBy: e.target.value
+                    })
                   }
                   className="w-full bg-zinc-800 rounded-xl px-4 py-3 outline-none"
                 />
 
                 <input
                   type="date"
-                  value={newDebt.dueDate}
+                  value={newReceivable.dueDate}
                   onChange={e =>
-                    setNewDebt({ ...newDebt, dueDate: e.target.value })
+                    setNewReceivable({
+                      ...newReceivable,
+                      dueDate: e.target.value
+                    })
                   }
                   className="w-full bg-zinc-800 rounded-xl px-4 py-3 outline-none"
                 />
               </div>
 
               <button
-                onClick={addDebt}
-                className="mt-5 w-full bg-emerald-500 text-black font-semibold py-3 rounded-xl" style={{marginTop:'10px'}}
+                onClick={addReceivable}
+                className="mt-5 w-full bg-emerald-500 text-black font-semibold py-3 rounded-xl"
               >
-                Save Debt
+                Save
               </button>
             </div>
           </div>
