@@ -17,5 +17,5 @@ body{
     color: rgb(206, 205, 205);
 }
 html, body {
-  touch-action: none;
+  touch-action: manipulation;
 }
