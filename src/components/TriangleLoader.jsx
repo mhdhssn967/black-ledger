@@ -4,7 +4,7 @@ import './loader.css'
 const TriangleLoader = () => {
   return (
     <div className='loader'>
-      <img style={{width:'80px'}} src="/loader.png" alt="" />
+      <img style={{width:'80px'}} src="/loader.gif" alt="" />
     </div>
   )
 }

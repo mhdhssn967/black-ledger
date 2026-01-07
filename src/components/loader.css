@@ -12,7 +12,7 @@
 }
 .loader img{
  
-    animation: triangle-spin 2s linear infinite;
+    /* animation: triangle-spin 2s linear infinite; */
     /* transform-origin: 50% 50%;  */
 }
 @keyframes triangle-spin {
