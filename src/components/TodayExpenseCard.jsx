@@ -40,7 +40,7 @@ export default function TodayExpenseCard() {
   }
 
   return (
-    <div className='today'><p style={{color:'white'}}>Todays Expense</p>
+    <div className='today'><p style={{color:'white'}}>Todays Spend</p>
       {loading ? (
         <p className="text-zinc-500 text-sm">Calculating…</p>
       ) : (
