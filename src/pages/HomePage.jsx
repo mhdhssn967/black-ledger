@@ -10,6 +10,7 @@ import FinanceCard from '../components/FinanceCard'
 import { UserContext } from '../context/UserContext'
 import { getFinanceSummary } from '../service/getFinanceSummary'
 import TodayExpenseCard from '../components/TodayExpenseCard'
+import TriangleLoader from '../components/TriangleLoader'
 
 const MySwal = withReactContent(Swal)
 
@@ -94,9 +95,13 @@ const [data,setData]=useState({})
       setData(summary)}
     };getNameTitle()
   },[userId])
+  console.log(data);
+  
 
   return (
+  
     <div style={{marginBottom:'20px'}}>
+      {!data.profile&&<TriangleLoader/>}
       
       <div className="relative bg-black text-white flex items-center justify-center px-6 overflow-hidden">
       <div className='nav'>
@@ -273,5 +278,6 @@ const [data,setData]=useState({})
 </div>
 
     </div>
+  
   )
 }

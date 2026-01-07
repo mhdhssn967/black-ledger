@@ -1,0 +1,26 @@
+.loader{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    top: 0px;
+    z-index: 200;
+    left: 0px;
+}
+.loader img{
+ 
+    animation: triangle-spin 2s linear infinite;
+    /* transform-origin: 50% 50%;  */
+}
+@keyframes triangle-spin {
+    0% { transform: rotate(0deg); }        /* first side */
+    10% { transform: rotate(120deg) scale(0.8); }     /* fast flip to next side */
+    33% { transform: rotate(120deg); }     /* pause on this side */
+    43% { transform: rotate(240deg) scale(0.8); }     /* fast flip to next side */
+    66% { transform: rotate(240deg); }     /* pause on this side */
+    76% { transform: rotate(360deg) scale(0.8); }     /* fast flip to first side again */
+    100% { transform: rotate(360deg); }    /* pause on first side */
+}

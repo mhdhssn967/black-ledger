@@ -12,10 +12,12 @@ import {
   IndianRupee
 } from 'lucide-react'
 import { UserContext } from '../context/UserContext'
+import TriangleLoader from './TriangleLoader'
 
 export default function ExpenseTable() {
   const [expenses, setExpenses] = useState([])
   const [selected, setSelected] = useState(null)
+  const [loading,setLoading]=useState(true)
    const userId = useContext(UserContext)
 
   const [fromDate, setFromDate] = useState('')
@@ -42,6 +44,7 @@ const availableMonths = Array.from(
   const loadExpenses = async () => {
     const data = await fetchExpenses(userId.userId)
     setExpenses(data)
+    setLoading(false)
   }
 const filteredExpenses = expenses.filter(exp => {
   if (!exp.createdAt) return false
@@ -82,7 +85,7 @@ const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
 
   return (
     <div className="max-w-xl mx-auto px-4 pb-10">
-
+{loading&&<TriangleLoader/>}
       {/* 🔹 HEADING */}
       <h1 className="text-xl font-semibold text-white mb-2">
         Expenses

@@ -12,9 +12,11 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext'
+import TriangleLoader from '../components/TriangleLoader'
 export default function ExpenseBreakdown() {
   const [monthFilter, setMonthFilter] = useState('')
   const USER_ID = useContext(UserContext)
+  const [loading,setLoading]=useState(true)
   const [summary, setSummary] = useState({
     total: 0,
     byCategory: {},
@@ -29,7 +31,9 @@ const navigate = useNavigate()
 
   const loadSummary = async () => {
    if(USER_ID.userId){ const data = await getExpenseSummary(monthFilter,USER_ID.userId)
-    setSummary(data)}
+    setSummary(data)
+    setLoading(false)
+  }
   }
 function Section({ title, icon: Icon, children }) {
   return (
@@ -56,6 +60,7 @@ function BreakdownRow({ label, value }) {
 
   return (
     <>
+    {loading&&<TriangleLoader/>}
     <button
         onClick={() => navigate('/')}
         className="flex items-center gap-2 text-zinc-400 hover:text-white " style={{margin:'30px'}}
@@ -93,7 +98,7 @@ function BreakdownRow({ label, value }) {
                 ₹{summary.total.toLocaleString()}
               </h2>
             </div>
-            <button className='bg-emerald-400 p-4 pt-3 rounded-2xl'><ChartAreaIcon/></button>
+            <button onClick={()=>navigate('/expensebreakdowncharts')} className='bg-emerald-400 p-4 pt-3 rounded-2xl'><ChartAreaIcon/></button>
           </div>
         
           {/* ➤ Category Breakdown */}

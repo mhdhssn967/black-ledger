@@ -11,6 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts'
+import TriangleLoader from '../components/TriangleLoader'
 
 export default function ExpenseCharts() {
   const [monthFilter, setMonthFilter] = useState('')
@@ -24,6 +25,7 @@ export default function ExpenseCharts() {
     byContext: {},
     months: []
   })
+  const [loading,setLoading]=useState(true)
 
   useEffect(() => {
     if (USER_ID.userId) loadSummary()
@@ -32,6 +34,7 @@ export default function ExpenseCharts() {
   const loadSummary = async () => {
     const data = await getExpenseSummary(monthFilter, USER_ID.userId)
     setSummary(data)
+    setLoading(false)
   }
 
   const toChartData = obj =>
@@ -42,6 +45,7 @@ export default function ExpenseCharts() {
 
   return (
     <>
+    {loading&&<TriangleLoader/>}
       {/* Back */}
       <button style={{margin:'20px'}}
         onClick={() => navigate('/')}

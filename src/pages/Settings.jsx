@@ -6,6 +6,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '../../firebaseConfig'
 import { UserContext } from '../context/UserContext'
 import { logoutUser } from '../service/services'
+import TriangleLoader from '../components/TriangleLoader'
 
 export default function Settings() {
   const USER_ID = useContext(UserContext) // 🔥 replace later with auth uid
@@ -20,6 +21,7 @@ export default function Settings() {
   })
 
   const [input, setInput] = useState('')
+  const [loading,setLoading]=useState(true)
 
   /* 🔄 LOAD FROM FIRESTORE */
   useEffect(() => {
@@ -44,6 +46,7 @@ export default function Settings() {
               ? d.contexts
               : ['Myself', 'Family', 'Friends']
           })
+          setLoading(false)
         } else {
           const defaults = {
             profile: { name: 'User', title: 'User Title' },
@@ -83,7 +86,7 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10 font-premium">
-
+{loading&&<TriangleLoader/>}
       <div style={{display:'flex',justifyContent:'space-between'}}>
         <button
           onClick={() => navigate('/')}

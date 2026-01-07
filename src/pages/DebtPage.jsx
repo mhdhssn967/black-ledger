@@ -14,6 +14,7 @@ import {
   clearDebt
 } from '../service/debtService'
 import { UserContext } from '../context/UserContext'
+import TriangleLoader from '../components/TriangleLoader'
 
 export default function DebtPage() {
     const user_id=useContext(UserContext)
@@ -21,6 +22,7 @@ export default function DebtPage() {
 
   const [debts, setDebts] = useState([])
   const [showModal, setShowModal] = useState(false)
+  const [loading,setLoading]=useState(true)
 
   const [newDebt, setNewDebt] = useState({
     amount: '',
@@ -36,6 +38,7 @@ export default function DebtPage() {
   const loadDebts = async () => {
     const data = await fetchPendingDebts(user_id.userId)
     setDebts(data)
+    setLoading(false)
   }
 
   const totalDebt = debts.reduce(
@@ -59,6 +62,7 @@ export default function DebtPage() {
 
   return (
     <>
+    {loading&&<TriangleLoader/>}
       <button
         onClick={() => navigate('/')}
         className="flex items-center gap-2 text-zinc-400 hover:text-white"
