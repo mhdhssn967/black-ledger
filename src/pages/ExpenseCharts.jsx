@@ -12,7 +12,7 @@ import {
   ResponsiveContainer
 } from 'recharts'
 
-export default function ExpenseBreakdownCharts() {
+export default function ExpenseCharts() {
   const [monthFilter, setMonthFilter] = useState('')
   const USER_ID = useContext(UserContext)
   const navigate = useNavigate()
