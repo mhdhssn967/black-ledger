@@ -21,6 +21,8 @@ export default function HomePage() {
 
   const [step, setStep] = useState('amount')
 
+  const [loading,setLoading]=useState(true)
+
 
   const [expense, setExpense] = useState({
     amount: '',
@@ -92,7 +94,9 @@ const [data,setData]=useState({})
     const getNameTitle=async()=>{
       
  if(userId.userId){const summary = await getFinanceSummary(userId.userId)
-      setData(summary)}
+      setData(summary)
+    setLoading(false)
+    }
     };getNameTitle()
   },[userId])
   console.log(data);
@@ -101,7 +105,7 @@ const [data,setData]=useState({})
   return (
   
     <div style={{marginBottom:'20px'}}>
-      {!data.profile&&<TriangleLoader/>}
+      {loading&&<TriangleLoader/>}
       
       <div className="relative bg-black text-white flex items-center justify-center px-6 overflow-hidden">
       <div className='nav'>
