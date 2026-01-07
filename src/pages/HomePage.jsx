@@ -225,30 +225,47 @@ const [data,setData]=useState({})
         <FinanceCard />
       </div>
       
-      <div style={{display:'flex',justifyContent:'center'}}>
-        <button
-  onClick={() => navigate('/debts')}
-  className="
-    mt-6
-    w-75
-    bg-emerald-400
-    border border-zinc-800
-    rounded-2xl
-    px-8
-    py-4
-    text-white
-    font-semibold
-    flex
-    items-center
-    justify-between
-    hover:border-emerald-500
-    hover:bg-zinc-900/80
-    transition
-  "
->
-  <span>Manage your debts</span>
-  <span className="text-black-400 text-bg">→</span>
-</button></div>
+      <div className="flex justify-center gap-4 mt-6">
+  {/* Analysis */}
+  <button
+    onClick={() => navigate('/expensebreakdown')}
+    className="
+      flex items-center gap-3
+      rounded-2xl
+      px-8 py-4
+      bg-emerald-400
+      text-black
+      font-semibold
+      border border-emerald-500
+      hover:bg-emerald-500
+      transition
+    "
+  >
+    <span>Analysis</span>
+    <span className="text-lg">→</span>
+  </button>
+
+  {/* Debts */}
+  <button
+    onClick={() => navigate('/debts')}
+    className="
+      flex items-center gap-3
+      rounded-2xl
+      px-8 py-4
+      bg-zinc-900
+      text-white
+      font-semibold
+      border border-zinc-800
+      hover:border-emerald-500
+      hover:text-emerald-400
+      transition
+    "
+  >
+    <span>Debts</span>
+    <span className="text-lg">→</span>
+  </button>
+</div>
+
 </div>
 
     </div>

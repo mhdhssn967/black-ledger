@@ -225,35 +225,45 @@ function ExpenseModal({ expense, onClose, onDelete, onSave }) {
         </h2>
 
         {/* Fields */}
-        <div className="space-y-4 text-sm">
-          {['amount', 'category', 'source', 'context', 'remarks'].map(key => (
-            <div key={key}>
-              <p className="text-xs text-zinc-400 capitalize mb-1">
-                {key}
-              </p>
+        <div className="space-y-3 text-sm">
+  {['amount', 'category', 'source', 'context', 'remarks'].map(key => (
+    <div
+      key={key}
+      className="flex items-start justify-between gap-4 bg-zinc-900/60 rounded-xl px-4 py-3"
+    >
+      {/* Label */}
+      <div className="w-32 shrink-0">
+        <p className="text-xs text-zinc-400 uppercase tracking-wide">
+          {key}
+        </p>
+      </div>
 
-              {edit ? (
-                <input
-                  value={data[key] || ''}
-                  onChange={e =>
-                    setData({ ...data, [key]: e.target.value })
-                  }
-                  className="w-full bg-zinc-800 rounded-xl px-4 py-2 outline-none text-white"
-                />
-              ) : (
-                <p className="text-white">
-                  {expense[key] || '-'}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+      {/* Value */}
+      <div className="flex-1 text-right">
+        {edit ? (
+          <input
+            value={data[key] || ''}
+            onChange={e =>
+              setData({ ...data, [key]: e.target.value })
+            }
+            className="w-full bg-zinc-800 rounded-lg px-3 py-2 text-white outline-none text-sm"
+          />
+        ) : (
+          <p className="text-white font-medium">
+            {expense[key] || '—'}
+          </p>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
 
         {/* Actions */}
         <div className="flex justify-between items-center mt-8">
           <button
             onClick={onDelete}
-            className="flex items-center gap-2 text-red-400 hover:text-red-300 text-sm"
+            className="flex items-center gap-2 text-red-400 hover:text-red-300 text-sm" style={{color:'red'}}
           >
             <Trash2 size={16} />
             Delete

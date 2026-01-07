@@ -14,29 +14,7 @@ const Insights = () => {
         <ArrowLeft size={18} />
         Back
       </button>
-      <div style={{display:'flex',justifyContent:'center'}}><button
-  onClick={() => navigate('/expensebreakdown')} style={{marginBottom:'10px'}}
-  className="
-    mt-6
-    w-75
-    bg-emerald-400
-    border border-zinc-800
-    rounded-2xl
-    px-8
-    py-4
-    text-white
-    font-semibold
-    flex
-    items-center
-    justify-between
-    hover:border-emerald-500
-    hover:bg-zinc-900/80
-    transition
-  "
->
-  <span>View expense breakdown</span>
-  <span className="text-black-400 text-bg">→</span>
-</button></div>
+     
         <ExpenseTable/>
       
     </div>
