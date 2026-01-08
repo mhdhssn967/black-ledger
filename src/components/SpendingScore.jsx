@@ -1,9 +1,10 @@
 import { useEffect, useState, useContext } from 'react'
 import { TrendingUp, TrendingDown, ShieldCheck } from 'lucide-react'
-import { fetchExpenses } from '../service/expenseService'
+import { calculateSpendSummary, fetchCurrentMonthExpenses, fetchExpenses } from '../service/expenseService'
 import { fetchLimits, saveLimits } from '../service/limitService'
 import EditLimitsModal from './EditLimitsModal'
 import { UserContext } from '../context/UserContext'
+import { getFinanceSummary } from '../service/getFinanceSummary'
 
 export default function SpendingScore() {
   const user = useContext(UserContext)
@@ -17,6 +18,13 @@ export default function SpendingScore() {
   const [score, setScore] = useState(70)
   const [status, setStatus] = useState('neutral')
   const [open, setOpen] = useState(false)
+
+  const [salary,setSalary]=useState(0)
+
+  const [spendData,setSpendData]=useState({})
+  console.log(spendData);
+  
+
 
   useEffect(() => {
     if (!user?.userId) return
@@ -86,6 +94,33 @@ export default function SpendingScore() {
       ? TrendingDown
       : TrendingUp
 
+const getSpendStats = async (userId) => {
+  const expenses = await fetchCurrentMonthExpenses(userId)
+
+  const summary = calculateSpendSummary(expenses)
+
+  return {
+    ...summary,
+    expenses // optional if you want to reuse them
+  }
+}
+
+
+useEffect(() => {
+  const loadSpend = async () => {
+    if (!user.userId) return
+
+    const stats = await getSpendStats(user.userId)
+    const summary = await getFinanceSummary(user.userId)
+
+    setSpendData(stats)
+    setSalary(summary.salary)
+  }
+
+  loadSpend()
+}, [user])
+
+
   return (
     <>
       <div
@@ -119,6 +154,11 @@ export default function SpendingScore() {
           await saveLimits(user.userId, limits)
           setOpen(false)
         }}
+        dailySpend={spendData.today}
+        weeklySpend={spendData.weekly}
+        monthlySpend={spendData.monthly}
+        totalSpend={spendData.monthly}
+        salary={salary}
       />
     </>
   )

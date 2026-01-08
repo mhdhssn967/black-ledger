@@ -135,8 +135,8 @@ export default function DebtPage() {
 
         {/* MODAL */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-            <div className="bg-zinc-900 rounded-2xl p-6 w-full max-w-sm relative">
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 ">
+            <div className="bg-zinc-900 rounded-2xl p-6 w-75 max-w-sm relative modal-custom">
 
               <button
                 onClick={() => setShowModal(false)}

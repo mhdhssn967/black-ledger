@@ -226,7 +226,7 @@ function ExpenseModal({ expense, onClose, onDelete, onSave }) {
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-      <div className="bg-zinc-900 rounded-3xl p-6 w-full max-w-sm relative border border-zinc-800">
+      <div className="bg-zinc-900 rounded-3xl p-6 w-full max-w-sm relative border border-zinc-800 modal-custom">
 
         {/* Close */}
         <button

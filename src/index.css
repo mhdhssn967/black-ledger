@@ -19,3 +19,14 @@ body{
 html, body {
   touch-action: manipulation;
 }
+.modal-custom{
+    animation: spendOpen 0.5s;
+}
+@keyframes spendOpen {
+    0%{
+        transform: scale(0) ;
+    }
+    100%{
+        transform: scale(1);
+    }
+}

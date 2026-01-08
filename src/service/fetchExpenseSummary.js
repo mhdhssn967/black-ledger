@@ -54,3 +54,6 @@ export const getExpenseSummary = async (filterMonth,userId) => {
     months: Array.from(summary.months)
   }
 }
+
+
+// for anlaytics
