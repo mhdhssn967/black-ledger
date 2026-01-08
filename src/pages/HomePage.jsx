@@ -11,6 +11,7 @@ import { UserContext } from '../context/UserContext'
 import { getFinanceSummary } from '../service/getFinanceSummary'
 import TodayExpenseCard from '../components/TodayExpenseCard'
 import TriangleLoader from '../components/TriangleLoader'
+import SpendingScore from '../components/SpendingScore'
 
 const MySwal = withReactContent(Swal)
 
@@ -118,6 +119,7 @@ const [data,setData]=useState({})
             <SettingsIcon size={22} />
           </button>
       </ div>
+      <SpendingScore/>
       
         {/* 🔮 BACKGROUND BRANDING */}
         <div className='home-one'>
