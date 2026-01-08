@@ -75,13 +75,16 @@ export default function FinanceCard() {
    
         <button style={{zIndex:'100',cursor:'pointer'}}
           onClick={() => navigate('/insights')}
-          className="flex items-center gap-1 text-sm bg-black text-emerald-400 rounded p-2 hover:text-emerald-300 transition"
+          className="flex items-center gap-1 text-sm  text-emerald-400 rounded p-2 hover:text-emerald-300 transition"
         >
           View expenses <ArrowRight size={14} />
         </button>
       </div>
 
       {/* Decorative shapes */}
+      <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-emerald-500 rounded-full opacity-10 rotate-45"></div>
+      <div className="absolute -top-20 -left-10 w-56 h-56 bg-indigo-500 rounded-full opacity-10 rotate-12"></div>
+    
        </div>
   )
 }

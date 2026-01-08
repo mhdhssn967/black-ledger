@@ -109,7 +109,7 @@ const [data,setData]=useState({})
       
       <div className="relative bg-black text-white flex items-center justify-center px-6 overflow-hidden">
       <div className='nav'>
-        <img src="/logo.png" width={"150px"} alt="" />
+        <img src="/logo.png" alt="" />
           {/* ⚙ SETTINGS */}
           <button
             onClick={() => navigate('/settings')}
@@ -236,6 +236,8 @@ const [data,setData]=useState({})
      <div className='home-bottom'><div style={{alignItems:'center'}} className="p-6 bg-black flex-col flex justify-center ">
         <TodayExpenseCard/>
         <FinanceCard />
+
+
       </div>
       
       <div className="flex justify-center gap-4 mt-6">

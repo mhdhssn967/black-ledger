@@ -4,7 +4,7 @@
     top: 20px;
     padding: 20px;
     z-index: 1;
-    opacity: 0.3;
+    opacity: 0.8;
     left: 0px;
 }
 .home-one{
@@ -23,9 +23,13 @@
 .nav{
 
     position: fixed;
-    top: 0px;
+    top: -10px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     padding: 30px;
+    align-items: center;
+}
+.nav img{
+    width: 100px;
 }
