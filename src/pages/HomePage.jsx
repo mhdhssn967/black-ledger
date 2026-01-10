@@ -134,7 +134,8 @@ const [data,setData]=useState({})
                Manage all your expenses at ease
             </span> */}
           </div>
-        
+
+
       
         {/* 🧠 FOREGROUND CONTENT */}
         <div className="relative z-10 w-full max-w-sm"  style={{marginTop:'220px'}}>
@@ -238,7 +239,6 @@ const [data,setData]=useState({})
      <div className='home-bottom'><div style={{alignItems:'center'}} className="p-6 bg-black flex-col flex justify-center ">
         <TodayExpenseCard/>
         <FinanceCard />
-
 
       </div>
       

@@ -1,11 +1,16 @@
 // src/service/financeService.js
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs
+} from 'firebase/firestore'
 import { db } from '../../firebaseConfig'
 
 export const getFinanceSummary = async (userId) => {
   if (!userId) throw new Error('User ID is required')
 
-  // 1️⃣ Fetch user preferences/settings
+  /* 1️⃣ FETCH USER SETTINGS */
   const prefRef = doc(db, 'users', userId, 'preferences', 'settings')
   const prefSnap = await getDoc(prefRef)
 
@@ -21,7 +26,7 @@ export const getFinanceSummary = async (userId) => {
     }
   }
 
-  // 2️⃣ Fetch expenses
+  /* 2️⃣ FETCH EXPENSES */
   const expensesRef = collection(db, 'users', userId, 'expenses')
   const expenseSnap = await getDocs(expensesRef)
 
@@ -30,14 +35,24 @@ export const getFinanceSummary = async (userId) => {
     totalExpenses += Number(doc.data().amount || 0)
   })
 
-  // 3️⃣ Calculate balance
-  const balance = salary - totalExpenses
+  /* 3️⃣ FETCH MONEY GOT (CREDITS) */
+  const creditsRef = collection(db, 'users', userId, 'credits')
+  const creditSnap = await getDocs(creditsRef)
 
-  // 4️⃣ Return everything
+  let totalCredits = 0
+  creditSnap.forEach(doc => {
+    totalCredits += Number(doc.data().amount || 0)
+  })
+
+  /* 4️⃣ CALCULATE BALANCE */
+  const balance = salary - totalExpenses + totalCredits
+
+  /* 5️⃣ RETURN SUMMARY */
   return {
     profile,
     salary,
     totalExpenses,
+    totalCredits,
     balance
   }
 }

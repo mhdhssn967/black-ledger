@@ -3,6 +3,7 @@ import { CreditCard, Wifi, Calendar, User, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getFinanceSummary } from '../service/getFinanceSummary'
 import { UserContext } from '../context/UserContext'
+import AddMoneyButton from './AddMoneyButton'
 
 export default function FinanceCard() {
   const navigate = useNavigate()
@@ -35,11 +36,14 @@ export default function FinanceCard() {
 
   return (
     <div style={{width:'90vw'}} className=" max-w-sm bg-gradient-to-r from-zinc-900 to-zinc-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
-
+<AddMoneyButton/>
       {/* Top icons */}
       <div className="flex justify-between items-center mb-8">
         <CreditCard/>
         <Wifi size={20} className="text-zinc-400" />
+        
+  {/* existing card UI */}
+
       </div>
 
       {/* Balance */}

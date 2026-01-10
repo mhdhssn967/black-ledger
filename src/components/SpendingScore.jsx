@@ -128,6 +128,7 @@ useEffect(() => {
         className="absolute top-13 right-1 bg-zinc-900/90 border border-zinc-800 rounded-2xl px-3 py-2 w-40 cursor-pointer hover:scale-[0.98] transition"
         style={{ transform: 'scale(0.8)',zIndex:'2' }}
       >
+        
         <div className="flex items-center justify-between">
           <div className="flex items-end gap-2">
             <p className={`font-semibold ${color}`}>{score}</p>
