@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Settings as SettingsIcon } from 'lucide-react'
+import { ArrowBigLeft, Settings as SettingsIcon } from 'lucide-react'
 import CategoryChips from '../components/CategoryChips'
 import { saveExpense } from '../service/saveExpense'
 import './HomePage.css'
@@ -12,6 +12,8 @@ import { getFinanceSummary } from '../service/getFinanceSummary'
 import TodayExpenseCard from '../components/TodayExpenseCard'
 import TriangleLoader from '../components/TriangleLoader'
 import SpendingScore from '../components/SpendingScore'
+import SurpriseModal from '../components/SurpriseModal'
+import { checkSurprise } from '../service/services'
 
 const MySwal = withReactContent(Swal)
 
@@ -23,6 +25,8 @@ export default function HomePage() {
   const [step, setStep] = useState('amount')
 
   const [loading,setLoading]=useState(true)
+  const [saving, setSaving] = useState(false);
+
 
 
   const [expense, setExpense] = useState({
@@ -56,38 +60,68 @@ export default function HomePage() {
   }
 
   const handleSave = async () => {
-    if (!expense.amount || !expense.category) return
+  if (!expense.amount || !expense.category || saving) return;
 
-    await saveExpense(expense,userId.userId)
+  setSaving(true);
 
+  // 🔄 Show loading Swal
+  MySwal.fire({
+    title: 'Adding expense...',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    background: '#111827',
+    color: '#fff',
+    didOpen: () => {
+      MySwal.showLoading();
+    }
+  });
+
+  try {
+    await saveExpense(expense, userId.userId);
+
+    // ✅ Success alert
     MySwal.fire({
-    title: 'Expense Added!',
-    html: `
-      <div class="text-left">
-        <p>₹${expense.amount}</p>
-        <p>Category: ${expense.category}</p>
-      </div>
-    `,
-    showConfirmButton: false,
-    timer: 2000,
-    background: '#111827', // dark background
-    color: '#fff',         // text color
-    toast: true,
-    position: 'center',
-    icon: 'success',
-    iconColor: '#10b981', // emerald green to match your button
-  })
+      title: 'Expense Added!',
+      html: `
+        <div class="text-left">
+          <p><strong>₹${expense.amount}</strong></p>
+          <p>Category: ${expense.category}</p>
+        </div>
+      `,
+      showConfirmButton: false,
+      timer: 2000,
+      background: '#111827',
+      color: '#fff',
+      toast: true,
+      position: 'center',
+      icon: 'success',
+      iconColor: '#10b981'
+    });
 
-    // reset UI
+    // 🔄 Reset UI
     setExpense({
       amount: '',
       category: '',
       source: '',
       context: '',
       remarks: ''
-    })
-    setStep('amount')
+    });
+    setStep('amount');
+
+  } catch (error) {
+    // ❌ Error handling
+    MySwal.fire({
+      title: 'Failed to add expense',
+      text: 'Please try again',
+      icon: 'error',
+      background: '#111827',
+      color: '#fff'
+    });
+  } finally {
+    setSaving(false);
   }
+};
+
 const [data,setData]=useState({})
   /* ---------- UI ---------- */
 
@@ -100,12 +134,46 @@ const [data,setData]=useState({})
     }
     };getNameTitle()
   },[userId])
-  console.log(data);
-  
+
+
+const goBack = () => {
+  if (step === 'category') {
+    setExpense(prev => ({ ...prev, category: null }));
+    setStep('amount');
+  } 
+  else if (step === 'source') {
+    setExpense(prev => ({ ...prev, source: null }));
+    setStep('category');
+  } 
+  else if (step === 'context') {
+    setExpense(prev => ({ ...prev, context: null }));
+    setStep('source');
+  } 
+  else if (step === 'remarks') {
+    setExpense(prev => ({ ...prev, remarks: '' }));
+    setStep('context');
+  }
+};
+const [showSurprise, setShowSurprise] = useState(false)
+console.log(showSurprise);
+
+
+useEffect(() => {
+  const init = async () => {
+    const isSurprise = await checkSurprise(userId.userId)
+    setShowSurprise(isSurprise)
+  }
+
+  init()
+}, [userId])
 
   return (
   
     <div style={{marginBottom:'20px'}}>
+      {showSurprise && (
+  <SurpriseModal userId={userId.userId} setShowSurprise={setShowSurprise}/>
+)}
+
       {loading&&<TriangleLoader/>}
       
       <div className="relative bg-black text-white flex items-center justify-center px-6 overflow-hidden">
@@ -139,6 +207,7 @@ const [data,setData]=useState({})
       
         {/* 🧠 FOREGROUND CONTENT */}
         <div className="relative z-10 w-full max-w-sm"  style={{marginTop:'220px'}}>
+
       
           {/* 💰 AMOUNT */}
           {step === 'amount' && (
@@ -167,6 +236,23 @@ const [data,setData]=useState({})
               </button>
             </div>
           )}
+          {step !== 'amount' && (
+  <button
+    onClick={goBack}
+    className="
+      flex items-center gap-2
+      text-black
+      bg-emerald-400
+      transition
+      rounded-xl
+      p-1
+    "
+  style={{marginRight:'20px',position:'fixed',left:'40px'}}
+  >
+   <ArrowBigLeft />
+  </button>
+)}
+
       
           {/* 🏷 CATEGORY */}
           {step === 'category' && (
@@ -223,11 +309,18 @@ const [data,setData]=useState({})
               />
       
               <button
-                onClick={handleSave}
-                className="mt-4 w-full rounded-xl bg-emerald-500 text-black font-semibold py-4"
-              >
-                Done
-              </button>
+  onClick={handleSave}
+  disabled={saving}
+  className={`
+    mt-4 w-full rounded-xl font-semibold py-4 transition
+    ${saving 
+      ? 'bg-zinc-700 text-zinc-400 cursor-not-allowed'
+      : 'bg-emerald-500 text-black'}
+  `}
+>
+  {saving ? 'Adding...' : 'Done'}
+</button>
+
             </>
           )}
       

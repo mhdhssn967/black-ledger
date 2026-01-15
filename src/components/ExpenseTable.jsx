@@ -13,6 +13,8 @@ import {
 } from 'lucide-react'
 import { UserContext } from '../context/UserContext'
 import TriangleLoader from './TriangleLoader'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../../firebaseConfig'
 
 export default function ExpenseTable() {
   const [expenses, setExpenses] = useState([])
@@ -221,8 +223,77 @@ const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
 /* ================= MODAL ================= */
 
 function ExpenseModal({ expense, onClose, onDelete, onSave }) {
+  const user_id = useContext(UserContext)
+  const usePreferenceItems = (type, user_id) => {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user_id?.userId) return;
+
+      const ref = doc(
+        db,
+        'users',
+        user_id.userId,
+        'preferences',
+        'settings'
+      );
+
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        setItems(snap.data()[type] || []);
+      }
+    };
+
+    fetchData();
+  }, [type, user_id]);
+
+  return items;
+};
+const categories = usePreferenceItems('categories', user_id);
+const sources = usePreferenceItems('sources', user_id);
+const contexts = usePreferenceItems('contexts', user_id);
+
   const [edit, setEdit] = useState(false)
   const [data, setData] = useState({ ...expense })
+  const renderField = (key) => {
+  if (['category', 'source', 'context'].includes(key)) {
+    const options =
+      key === 'category' ? categories :
+      key === 'source' ? sources :
+      contexts;
+
+    return (
+      <select
+        value={data[key] || ''}
+        onChange={e =>
+          setData({ ...data, [key]: e.target.value })
+        }
+        className="w-full bg-zinc-800 rounded-lg px-3 py-2 text-white outline-none text-sm"
+      >
+        <option value="">Select {key}</option>
+        {options.map(item => (
+          <option key={item} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
+  // amount & remarks
+  return (
+    <input
+      value={data[key] || ''}
+      onChange={e =>
+        setData({ ...data, [key]: e.target.value })
+      }
+      className="w-full bg-zinc-800 rounded-lg px-3 py-2 text-white outline-none text-sm"
+    />
+  );
+};
+
+  
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4">
@@ -257,20 +328,15 @@ function ExpenseModal({ expense, onClose, onDelete, onSave }) {
 
       {/* Value */}
       <div className="flex-1 text-right">
-        {edit ? (
-          <input
-            value={data[key] || ''}
-            onChange={e =>
-              setData({ ...data, [key]: e.target.value })
-            }
-            className="w-full bg-zinc-800 rounded-lg px-3 py-2 text-white outline-none text-sm"
-          />
-        ) : (
-          <p className="text-white font-medium">
-            {expense[key] || '—'}
-          </p>
-        )}
-      </div>
+  {edit ? (
+    renderField(key)
+  ) : (
+    <p className="text-white font-medium">
+      {expense[key] || '—'}
+    </p>
+  )}
+</div>
+
     </div>
   ))}
 </div>
