@@ -30,3 +30,10 @@ html, body {
         transform: scale(1);
     }
 }
+.letter p, .letter strong{
+    /* font-family: "Carattere", cursive; */
+    font-size: 15px;
+}
+.letter{
+    margin-top: 10px;
+}

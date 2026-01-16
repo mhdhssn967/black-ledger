@@ -14,6 +14,7 @@ import TriangleLoader from '../components/TriangleLoader'
 import SpendingScore from '../components/SpendingScore'
 import SurpriseModal from '../components/SurpriseModal'
 import { checkSurprise } from '../service/services'
+import BirthdayModal from '../components/BirthdayModal'
 
 const MySwal = withReactContent(Swal)
 
@@ -123,6 +124,8 @@ export default function HomePage() {
 };
 
 const [data,setData]=useState({})
+
+const [birthday,setBirthday]=useState(false)
   /* ---------- UI ---------- */
 
   useEffect(()=>{
@@ -170,9 +173,11 @@ useEffect(() => {
   return (
   
     <div style={{marginBottom:'20px'}}>
-      {showSurprise && (
-  <SurpriseModal userId={userId.userId} setShowSurprise={setShowSurprise}/>
-)}
+
+{showSurprise&&<button onClick={()=>setBirthday(true)} style={{position:'fixed',top:'150px',zIndex:'500',right:'30px'}}>
+  <img src="/surprise/gift.gif" style={{width:'60px',height:'55px',borderRadius:'50%',}} alt="" />
+</button>}
+{birthday&&<BirthdayModal setBirthday={setBirthday}/>}
 
       {loading&&<TriangleLoader/>}
       
