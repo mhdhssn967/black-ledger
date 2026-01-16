@@ -174,7 +174,7 @@ useEffect(() => {
   
     <div style={{marginBottom:'20px'}}>
 
-{showSurprise&&<button onClick={()=>setBirthday(true)} style={{position:'fixed',top:'150px',zIndex:'500',right:'30px'}}>
+{(showSurprise&&!birthday)&&<button onClick={()=>setBirthday(true)} style={{position:'fixed',top:'150px',zIndex:'500',right:'30px'}}>
   <img src="/surprise/gift.gif" style={{width:'60px',height:'55px',borderRadius:'50%',}} alt="" />
 </button>}
 {birthday&&<BirthdayModal setBirthday={setBirthday}/>}
