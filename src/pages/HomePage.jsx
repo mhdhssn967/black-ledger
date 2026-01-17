@@ -15,6 +15,7 @@ import SpendingScore from '../components/SpendingScore'
 import SurpriseModal from '../components/SurpriseModal'
 import { checkSurprise } from '../service/services'
 import BirthdayModal from '../components/BirthdayModal'
+import confetti from 'canvas-confetti'
 
 const MySwal = withReactContent(Swal)
 
@@ -37,6 +38,17 @@ export default function HomePage() {
     context: '',
     remarks: ''
   })
+
+   const popHearts = (big = false) => {
+      confetti({
+        particleCount: big ? 140 : 130,
+        spread: big ? 160 : 70,
+        origin: { y: 0.65 },
+        shapes: ['heart'],
+        colors: ['#ff4d6d', '#ff758f', '#ff8fab'],
+        scalar: big ? 1.3 : 1
+      })
+    }
 
   /* ---------- HANDLERS ---------- */
 
@@ -170,7 +182,30 @@ useEffect(() => {
   init()
 }, [userId])
 
+useEffect(()=>{
+showSurprise&&popHearts()
+},[loading])
+
   return (
+    <div className={showSurprise ? 'birthday-mode' : ''}> 
+    {showSurprise && (
+  <div className="birthday-effects">
+    {Array.from({ length: 20 }).map((_, i) => (
+      <span
+        key={i}
+        className="floating-icon"
+        style={{
+          left: `${Math.random() * 100}%`,
+          animationDelay: `${Math.random() * 5}s`,
+          fontSize: `${20 + Math.random() * 30}px`
+        }}
+      >
+        {i % 3 === 0 ? '🎂' : '💖'}
+      </span>
+    ))}
+  </div>
+)}
+ 
   
     <div style={{marginBottom:'20px'}}>
 
@@ -196,6 +231,13 @@ useEffect(() => {
       
         {/* 🔮 BACKGROUND BRANDING */}
         <div className='home-one'>
+
+          {showSurprise && (
+  <div className="birthday-banner">
+    <p>🎉 Happy Birthday Kanmani 🎉</p>
+  </div>
+)}
+
           <div className="home-ui">
             <span className="text-[25vw] font-extrabold tracking-tight text-white/80" style={{textWrap:'nowrap'}}>
               {/* <h3 className="text-[19vw]">Hi</h3> */}
@@ -383,6 +425,7 @@ useEffect(() => {
 
 </div>
 
+    </div>
     </div>
   
   )
