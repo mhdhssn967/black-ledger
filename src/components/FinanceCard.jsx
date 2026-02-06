@@ -1,13 +1,17 @@
 import { useContext, useEffect, useState } from 'react'
 import { CreditCard, Wifi, Calendar, User, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { getFinanceSummary } from '../service/getFinanceSummary'
+import { getFinanceSummary, getMonthlyBalance } from '../service/getFinanceSummary'
 import { UserContext } from '../context/UserContext'
 import AddMoneyButton from './AddMoneyButton'
 
 export default function FinanceCard() {
   const navigate = useNavigate()
  const userId = useContext(UserContext)
+
+ const [monthlyBalance,setMonthlyBalance]=useState(0)
+ console.log(monthlyBalance);
+ 
 
   // replace with auth.uid later
  
@@ -22,11 +26,16 @@ export default function FinanceCard() {
       if(userId.userId){
       const summary = await getFinanceSummary(userId.userId)
       setData(summary)
+      const monthBalanceRef=await getMonthlyBalance(userId.userId)
+      setMonthlyBalance(monthBalanceRef)
       }
       
     }
     loadData()
   }, [userId])
+
+
+
 
   const today = new Date().toLocaleDateString('en-GB', {
     day: '2-digit',
@@ -50,7 +59,7 @@ export default function FinanceCard() {
       <div className="mb-4">
         <p className="text-sm text-zinc-400 uppercase">Balance</p>
         <h3 className="text-3xl  tracking-tight">
-          ₹{data.balance.toLocaleString()}
+          ₹{monthlyBalance.monthlyBalance}
         </h3>
       </div>
 

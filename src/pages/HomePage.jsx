@@ -12,9 +12,7 @@ import { getFinanceSummary } from '../service/getFinanceSummary'
 import TodayExpenseCard from '../components/TodayExpenseCard'
 import TriangleLoader from '../components/TriangleLoader'
 import SpendingScore from '../components/SpendingScore'
-import SurpriseModal from '../components/SurpriseModal'
 import { checkSurprise } from '../service/services'
-import BirthdayModal from '../components/BirthdayModal'
 import confetti from 'canvas-confetti'
 
 const MySwal = withReactContent(Swal)
@@ -212,7 +210,7 @@ showSurprise&&popHearts()
 {(showSurprise&&!birthday)&&<button onClick={()=>setBirthday(true)} style={{position:'fixed',top:'150px',zIndex:'500',right:'30px'}}>
   <img src="/surprise/gift.gif" style={{width:'60px',height:'55px',borderRadius:'50%',}} alt="" />
 </button>}
-{birthday&&<BirthdayModal setBirthday={setBirthday}/>}
+
 
       {loading&&<TriangleLoader/>}
       
@@ -232,12 +230,6 @@ showSurprise&&popHearts()
         {/* 🔮 BACKGROUND BRANDING */}
         <div className='home-one'>
 
-          {showSurprise && (
-  <div className="birthday-banner">
-    <p>🎉 Happy Birthday Kanmani 🎉</p>
-  </div>
-)}
-
           <div className="home-ui">
             <span className="text-[25vw] font-extrabold tracking-tight text-white/80" style={{textWrap:'nowrap'}}>
               {/* <h3 className="text-[19vw]">Hi</h3> */}
@@ -253,12 +245,12 @@ showSurprise&&popHearts()
 
       
         {/* 🧠 FOREGROUND CONTENT */}
-        <div className="relative z-10 w-full max-w-sm"  style={{marginTop:'220px'}}>
+        <div className="relative z-10 w-full max-w-sm"  style={{marginTop:'300px'}}>
 
       
           {/* 💰 AMOUNT */}
           {step === 'amount' && (
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center" style={{marginTop:'280px'}}>
               <p className="text-zinc-400 text-sm mb-3">
                 Enter amount
               </p>
