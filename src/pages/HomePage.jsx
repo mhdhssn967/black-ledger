@@ -34,7 +34,8 @@ export default function HomePage() {
     category: '',
     source: '',
     context: '',
-    remarks: ''
+    remarks: '',
+    transactionDate: new Date().toISOString().split('T')[0]
   })
 
    const popHearts = (big = false) => {
@@ -54,6 +55,16 @@ export default function HomePage() {
     const value = e.target.value.replace(/\D/g, '')
     setExpense(prev => ({ ...prev, amount: value }))
   }
+
+  const handleDateChange = (e) => {
+  const value = e.target.value
+
+  setExpense(prev => ({
+    ...prev,
+    transactionDate: value
+  }))
+}
+
 
   const handleCategorySelect = category => {
     setExpense(prev => ({ ...prev, category }))
@@ -115,7 +126,8 @@ export default function HomePage() {
       category: '',
       source: '',
       context: '',
-      remarks: ''
+      remarks: '',
+      transactionDate: new Date().toISOString().split('T')[0]
     });
     setStep('amount');
 
@@ -150,9 +162,13 @@ const [birthday,setBirthday]=useState(false)
 
 
 const goBack = () => {
+  if (step === 'date') {
+    setExpense(prev => ({ ...prev, date: null }));
+    setStep('amount');
+  } 
   if (step === 'category') {
     setExpense(prev => ({ ...prev, category: null }));
-    setStep('amount');
+    setStep('date');
   } 
   else if (step === 'source') {
     setExpense(prev => ({ ...prev, source: null }));
@@ -168,7 +184,6 @@ const goBack = () => {
   }
 };
 const [showSurprise, setShowSurprise] = useState(false)
-console.log(showSurprise);
 
 
 useEffect(() => {
@@ -231,7 +246,7 @@ showSurprise&&popHearts()
         <div className='home-one'>
 
           <div className="home-ui">
-            <span className="text-[25vw] font-extrabold tracking-tight text-white/80" style={{textWrap:'nowrap'}}>
+            <span className="text-[25vw] font-extrabold tracking-tight text-white/50" style={{textWrap:'nowrap'}}>
               {/* <h3 className="text-[19vw]">Hi</h3> */}
                 {data?.profile?.name}
                 <p style={{fontStyle:'italic',fontWeight:'200',fontSize:'20px',marginTop:'-30px'}}>{data?.profile?.title}</p>
@@ -245,12 +260,52 @@ showSurprise&&popHearts()
 
       
         {/* 🧠 FOREGROUND CONTENT */}
-        <div className="relative z-10 w-full max-w-sm" >
+        {step !== 'amount' && (
+  <div
+    style={{
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(5px)', // for Safari
+      width: '100vw',
+      height: '100vh',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: 1
+    }}
+  />
+)}
 
-      
+       <div style={{display:'flex',alignItems:'center',width:'100vw',justifyContent:'center'}} >
+        
+         <div style={{padding:'20px',maxWidth:'90%'}}
+  className={`
+    relative z-10 w-full max-w-sm rounded-2xl 
+    ${step !== 'amount' ? 'bg-black border-emerald-600 border' : ''}
+  `}
+
+>
+
+
+      {step !== 'amount' && (
+  <button
+    onClick={goBack}
+    className="
+      flex items-center gap-2
+      text-black
+      bg-emerald-400
+      transition
+      rounded-xl
+      p-1
+    "
+  style={{marginBottom:'20px',position:'fixed'}}
+  >
+   <ArrowBigLeft />
+  </button>
+)}
           {/* 💰 AMOUNT */}
           {step === 'amount' && (
-            <div className="flex flex-col items-center text-center" style={{marginTop:'280px'}}>
+            <div className="flex flex-col items-center text-center" >
               <p className="text-zinc-400 text-sm mb-3">
                 Enter amount
               </p>
@@ -268,35 +323,45 @@ showSurprise&&popHearts()
       
               <button
                 disabled={!expense.amount}
-                onClick={() => setStep('category')}
+                onClick={() => setStep('date')}
                 className="mt-10 w-75 rounded-2xl bg-emerald-500 disabled:bg-zinc-800 text-black font-semibold py-4 transition"
               >
                 ADD
               </button>
             </div>
           )}
-          {step !== 'amount' && (
-  <button
-    onClick={goBack}
-    className="
-      flex items-center gap-2
-      text-black
-      bg-emerald-400
-      transition
-      rounded-xl
-      p-1
-    "
-  style={{marginRight:'20px',position:'fixed',left:'40px'}}
-  >
-   <ArrowBigLeft />
-  </button>
-)}
+
+          
+
+{
+  step==='date' && (
+    <div style={{display:'flex',flexDirection:'column'}}>
+   <p className="text-zinc-400 text-sm text-center text-[25px]" style={{marginBottom:'10px'}}>
+                Chose date
+              </p>
+    <input 
+  type="date"
+  max={new Date().toISOString().split('T')[0]}
+  value={expense.transactionDate}
+  onChange={handleDateChange}
+  className="w-75 mt-6 bg-zinc-900 text-white rounded-xl px-4 py-3 outline-none" style={{marginBottom:'20px'}}
+/>
+<button
+                onClick={() => setStep('category')}
+                className="mt-10 w-75 rounded-2xl bg-emerald-500 disabled:bg-zinc-800 text-black font-semibold py-4 transition"
+              >
+                Next
+              </button>
+
+    </div>
+  )
+}
 
       
           {/* 🏷 CATEGORY */}
           {step === 'category' && (
             <>
-              <p className="text-zinc-400 text-sm text-center text-[25px]" style={{margin:'10px'}}>
+              <p className="text-zinc-400 text-sm text-center text-[25px]" style={{marginBottom:'10px'}}>
                 ₹{expense.amount} spent on
               </p>
               <CategoryChips
@@ -309,7 +374,7 @@ showSurprise&&popHearts()
           {/* 💳 SOURCE */}
           {step === 'source' && (
             <>
-              <p className="text-zinc-400 text-sm mb-3 text-center text-[25px]" style={{margin:'10px'}}>
+              <p className="text-zinc-400 text-sm mb-3 text-center text-[25px]" style={{marginBottom:'10px'}}>
                 Paid using
               </p>
               <CategoryChips
@@ -335,7 +400,7 @@ showSurprise&&popHearts()
           {/* 📝 REMARKS */}
           {step === 'remarks' && (
             <>
-              <textarea
+              <textarea style={{marginTop:'50px'}}
                 value={expense.remarks}
                 onChange={e =>
                   setExpense(prev => ({
@@ -363,6 +428,7 @@ showSurprise&&popHearts()
             </>
           )}
       
+        </div>
         </div>
         </div>
          

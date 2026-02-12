@@ -1,25 +1,24 @@
 .home-ui{
-    margin-top: 40px;
-    position: fixed;
-    top: 20px;
+    margin-top: 60px;
+    /* position: fixed; */
     padding: 20px;
     z-index: 1;
     opacity: 0.8;
-    left: 0px;
-
+  height: 180px;
 }
 .home-one{
     display:'flex';
     flex-direction: column;
 }
 .home-bottom{
-    position: fixed;
-    bottom: 10px;
+    /* position: fixed;
+    bottom: 10px; */
     width: 100vw;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    z-index: 200;
 }
 .nav{
 
@@ -31,6 +30,7 @@
     padding: 30px;
     align-items: center;
 }
+
 .nav img{
     width: 100px;
 }

@@ -10,8 +10,7 @@ export default function FinanceCard() {
  const userId = useContext(UserContext)
 
  const [monthlyBalance,setMonthlyBalance]=useState(0)
- console.log(monthlyBalance);
- 
+
 
   // replace with auth.uid later
  
@@ -86,7 +85,7 @@ export default function FinanceCard() {
 <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-gray-500 rounded-full opacity-10 rotate-45"></div>
       <div className="absolute -top-20 -left-10 w-56 h-56 bg-gray-500 rounded-full opacity-10 rotate-12"></div>
    
-        <button style={{zIndex:'100',cursor:'pointer'}}
+        <button style={{cursor:'pointer'}}
           onClick={() => navigate('/insights')}
           className="flex items-center gap-1 text-sm  text-emerald-400 rounded p-2 hover:text-emerald-300 transition"
         >
