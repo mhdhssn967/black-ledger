@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowBigLeft, Settings as SettingsIcon } from 'lucide-react'
 import CategoryChips from '../components/CategoryChips'
-import { saveExpense } from '../service/saveExpense'
+import { addTransactionDateToExistingExpenses, saveExpense } from '../service/saveExpense'
 import './HomePage.css'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -199,6 +199,9 @@ useEffect(()=>{
 showSurprise&&popHearts()
 },[loading])
 
+
+
+
   return (
     <div className={showSurprise ? 'birthday-mode' : ''}> 
     {showSurprise && (
@@ -221,6 +224,7 @@ showSurprise&&popHearts()
  
   
     <div style={{marginBottom:'20px'}}>
+       
 
 {(showSurprise&&!birthday)&&<button onClick={()=>setBirthday(true)} style={{position:'fixed',top:'150px',zIndex:'500',right:'30px'}}>
   <img src="/surprise/gift.gif" style={{width:'60px',height:'55px',borderRadius:'50%',}} alt="" />
@@ -241,7 +245,7 @@ showSurprise&&popHearts()
           </button>
       </ div>
       <SpendingScore/>
-      
+     
         {/* 🔮 BACKGROUND BRANDING */}
         <div className='home-one'>
 
@@ -281,7 +285,7 @@ showSurprise&&popHearts()
          <div style={{padding:'20px',maxWidth:'90%'}}
   className={`
     relative z-10 w-full max-w-sm rounded-2xl 
-    ${step !== 'amount' ? 'bg-black border-emerald-600 border' : ''}
+    ${step !== 'amount' ? "bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 backdrop-blur-sm" : ''}
   `}
 
 >

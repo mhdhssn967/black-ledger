@@ -11,6 +11,15 @@ import {
   Calendar,
   IndianRupee
 } from 'lucide-react'
+
+import {
+  Tag,
+  CreditCard,
+  Users,
+  FileText
+} from "lucide-react"
+
+
 import { UserContext } from '../context/UserContext'
 import TriangleLoader from './TriangleLoader'
 import { doc, getDoc } from 'firebase/firestore'
@@ -28,9 +37,9 @@ const [selectedMonth, setSelectedMonth] = useState('')
 const availableMonths = Array.from(
   new Set(
     expenses
-      .filter(e => e.createdAt)
+      .filter(e => e.transactionDate)
       .map(e =>
-        e.createdAt.toDate().toLocaleString('default', {
+        new Date(e.transactionDate).toLocaleString('default', {
           month: 'long',
           year: 'numeric'
         })
@@ -49,40 +58,41 @@ const availableMonths = Array.from(
     setLoading(false)
   }
 const filteredExpenses = expenses.filter(exp => {
-  if (!exp.createdAt) return false
+  if (!exp.transactionDate) return false
 
-  const date = exp.createdAt.toDate()
+  const dateStr = exp.transactionDate // "YYYY-MM-DD"
 
   // 📅 From date
-  if (fromDate && date < new Date(fromDate)) return false
+  if (fromDate && dateStr < fromDate) return false
 
   // 📅 To date
-  if (toDate && date > new Date(toDate)) return false
+  if (toDate && dateStr > toDate) return false
 
   // 📆 Month dropdown
   if (selectedMonth) {
-    const monthKey = date.toLocaleString('default', {
+    const monthKey = new Date(dateStr).toLocaleString('default', {
       month: 'long',
       year: 'numeric'
     })
+
     if (monthKey !== selectedMonth) return false
   }
 
   return true
 })
 
+
 const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
-  const date = exp.createdAt.toDate()
-  const monthKey = date.toLocaleString('default', {
-    month: 'long',
-    year: 'numeric'
-  })
+  if (!exp.transactionDate) return acc
+
+  const monthKey = exp.transactionDate.slice(0, 7) // "YYYY-MM"
 
   if (!acc[monthKey]) acc[monthKey] = []
   acc[monthKey].push(exp)
 
   return acc
 }, {})
+
 
 
   return (
@@ -152,14 +162,20 @@ const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
     0
   )
 
+  
+
   return (
     <div key={month}>
 
       {/* 🔹 Month Header */}
       <div className="flex justify-between items-center mb-3 mt-5" style={{margin:'20px 10px'}}>
   <h2 className="text-sm font-semibold text-emerald-400 tracking-wide">
-    {month}
-  </h2>
+  {new Date(month + "-01").toLocaleString('default', {
+    month: 'long',
+    year: 'numeric'
+  })}
+</h2>
+
 
   <div className="flex items-center gap-1 text-red-400 font-semibold text-md">
     <IndianRupee size={14} />
@@ -183,7 +199,7 @@ const groupedExpenses = filteredExpenses.reduce((acc, exp) => {
               </p>
               <p className="text-xs text-zinc-400 flex items-center gap-1">
                 <Calendar size={12} />
-                {exp.createdAt?.toDate().toDateString()}
+                {exp.transactionDate}
               </p>
             </div>
 
@@ -292,84 +308,180 @@ const contexts = usePreferenceItems('contexts', user_id);
     />
   );
 };
+const InfoCard = ({
+  icon,
+  label,
+  value,
+  edit,
+  options = [],
+  onChange,
+  textarea = false
+}) => {
+  return (
+    <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 backdrop-blur-sm " style={{marginBottom:'10px'}}>
+
+      <div className="flex items-center gap-3 mb-2 text-emerald-400 text-xs uppercase tracking-wide">
+        {icon}
+        <span >{label}</span>
+      </div>
+
+      {edit ? (
+        textarea ? (
+          <textarea
+            value={value || ""}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full bg-zinc-800 rounded-xl px-3 py-2 text-white outline-none text-sm" 
+          />
+        ) : (
+          <select style={{marginTop:'15px'}}
+            value={value || ""}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full bg-zinc-800 rounded-xl px-3 py-2 text-white outline-none text-sm"
+          >
+            <option value="">Select {label}</option>
+            {options.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        )
+      ) : (
+        <p className="text-white font-medium text-sm" style={{marginTop:'10px'}}>
+          {value || "—"}
+        </p>
+      )}
+    </div>
+  )
+}
 
   
 
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-      <div className="bg-zinc-900 rounded-3xl p-6 w-full max-w-sm relative border border-zinc-800 modal-custom">
+return (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 px-4 modal-custom">
+    <div className="bg-zinc-950 rounded-3xl w-full max-w-md p-6 relative border border-zinc-800 shadow-2xl">
 
-        {/* Close */}
+      {/* Close */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-zinc-500 hover:text-white transition"
+      >
+        <X size={18} />
+      </button>
+
+      {/* DATE */}
+      <div className="flex items-center justify-center gap-2 text-zinc-400 text-sm mb-5">
+        <Calendar size={16} />
+        {edit ? (
+          <input
+            type="date"
+            value={data.transactionDate || ""}
+            onChange={(e) =>
+              setData({ ...data, transactionDate: e.target.value })
+            }
+            className="bg-zinc-800 px-3 py-1 rounded-lg text-sm text-white outline-none"
+          />
+        ) : (
+          <span>
+            {data.transactionDate
+              ? new Date(data.transactionDate).toLocaleDateString("default", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+                })
+              : "—"}
+          </span>
+        )}
+      </div>
+
+      {/* AMOUNT */}
+      <div className="text-center mb-8" style={{margin:'20px'}}>
+        {edit ? (
+          <input
+            type="number"
+            value={data.amount}
+            onChange={(e) =>
+              setData({ ...data, amount: e.target.value })
+            }
+            className="bg-transparent text-6xl font-bold text-white text-center outline-none w-full"
+          />
+        ) : (
+          <h1 className="text-6xl font-bold text-white tracking-tight">
+            ₹{data.amount}
+          </h1>
+        )}
+      </div>
+
+      {/* INFO SECTIONS */}
+      <div className="space-y-4">
+
+        <InfoCard
+          icon={<Tag size={18} />}
+          label="Category"
+          value={data.category}
+          edit={edit}
+          options={categories}
+          onChange={(val) => setData({ ...data, category: val })}
+        />
+
+        <InfoCard
+          icon={<CreditCard size={18} />}
+          label="Paid Using"
+          value={data.source}
+          edit={edit}
+          options={sources}
+          onChange={(val) => setData({ ...data, source: val })}
+        />
+
+        <InfoCard
+          icon={<Users size={18} />}
+          label="With"
+          value={data.context}
+          edit={edit}
+          options={contexts}
+          onChange={(val) => setData({ ...data, context: val })}
+        />
+
+        {data.remarks&&<InfoCard
+          icon={<FileText size={18} />}
+          label="Remarks"
+          value={data.remarks}
+          edit={edit}
+          textarea
+          onChange={(val) => setData({ ...data, remarks: val })}
+        />}
+      </div>
+
+      {/* ACTIONS */}
+      <div className="flex justify-between items-center mt-10">
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-500 hover:text-white"
+          onClick={onDelete}
+          className="flex items-center gap-2 text-red-400 hover:text-red-300 text-sm transition"
         >
-          <X size={18} />
+          <Trash2 size={16} />
+          Delete
         </button>
 
-        {/* Title */}
-        <h2 className="text-lg font-semibold text-white mb-6">
-          Expense details
-        </h2>
-
-        {/* Fields */}
-        <div className="space-y-3 text-sm">
-  {['amount', 'category', 'source', 'context', 'remarks'].map(key => (
-    <div
-      key={key}
-      className="flex items-start justify-between gap-4 bg-zinc-900/60 rounded-xl px-4 py-3"
-    >
-      {/* Label */}
-      <div className="w-32 shrink-0">
-        <p className="text-xs text-zinc-400 uppercase tracking-wide">
-          {key}
-        </p>
-      </div>
-
-      {/* Value */}
-      <div className="flex-1 text-right">
-  {edit ? (
-    renderField(key)
-  ) : (
-    <p className="text-white font-medium">
-      {expense[key] || '—'}
-    </p>
-  )}
-</div>
-
-    </div>
-  ))}
-</div>
-
-
-        {/* Actions */}
-        <div className="flex justify-between items-center mt-8">
+        {edit ? (
           <button
-            onClick={onDelete}
-            className="flex items-center gap-2 text-red-400 hover:text-red-300 text-sm" style={{color:'red'}}
+            onClick={() => onSave(data)}
+            className="bg-emerald-500 hover:bg-emerald-400 text-black px-6 py-2 rounded-xl font-medium transition"
           >
-            <Trash2 size={16} />
-            Delete
+            Save
           </button>
-
-          {edit ? (
-            <button
-              onClick={() => onSave(data)}
-              className="bg-emerald-500 hover:bg-emerald-400 text-black px-5 py-2 rounded-xl font-medium transition"
-            >
-              Save
-            </button>
-          ) : (
-            <button
-              onClick={() => setEdit(true)}
-              className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-sm"
-            >
-              <Pencil size={16} />
-              Edit
-            </button>
-          )}
-        </div>
+        ) : (
+          <button
+            onClick={() => setEdit(true)}
+            className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 text-sm transition"
+          >
+            <Pencil size={16} />
+            Edit
+          </button>
+        )}
       </div>
     </div>
-  )
+  </div>
+)
+
+
 }
