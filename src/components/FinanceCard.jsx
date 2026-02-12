@@ -7,96 +7,166 @@ import AddMoneyButton from './AddMoneyButton'
 
 export default function FinanceCard() {
   const navigate = useNavigate()
- const userId = useContext(UserContext)
+  const userId = useContext(UserContext)
 
- const [monthlyBalance,setMonthlyBalance]=useState(0)
-
-
-  // replace with auth.uid later
- 
+  const [monthlyBalance, setMonthlyBalance] = useState(0)
+const [loading, setLoading] = useState(true)
+  
   const [data, setData] = useState({
-    balance: 0,
     salary: 0,
-    totalExpenses: 0
+    monthlyExpenses: 0 // 👈 IMPORTANT: must come from backend
   })
+  
+
 
   useEffect(() => {
     const loadData = async () => {
-      if(userId.userId){
-      const summary = await getFinanceSummary(userId.userId)
-      setData(summary)
-      const monthBalanceRef=await getMonthlyBalance(userId.userId)
-      setMonthlyBalance(monthBalanceRef)
+      if (userId.userId) {
+        const summary = await getFinanceSummary(userId.userId)
+        setData(summary)
+
+        const monthBalanceRef = await getMonthlyBalance(userId.userId)
+        setMonthlyBalance(monthBalanceRef)
       }
-      
     }
     loadData()
   }, [userId])
 
+  useEffect(() => {
+  const loadData = async () => {
+    if (userId.userId) {
+      const summary = await getFinanceSummary(userId.userId)
+      setData(summary)
+
+      const monthBalanceRef = await getMonthlyBalance(userId.userId)
+      setMonthlyBalance(monthBalanceRef)
+
+      setLoading(false) // 👈 important
+    }
+  }
+  loadData()
+}, [userId])
 
 
+  // ✅ Correct percentage calculation
+  const percentUsed =
+    data.salary > 0
+      ? Math.min((monthlyBalance.monthlyExpenses / data.salary) * 100, 100)
+      : 0
 
-  const today = new Date().toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  })
+  const radius = 42
+  const circumference = 2 * Math.PI * radius
+  const offset = circumference - (percentUsed / 100) * circumference
 
-  return (
-    <div style={{width:'90vw'}} className=" max-w-sm bg-gradient-to-r from-zinc-900 to-zinc-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
-<AddMoneyButton/>
-      {/* Top icons */}
-      <div className="flex justify-between items-center mb-8">
-        <CreditCard/>
-        <Wifi size={20} className="text-zinc-400" />
-        
-  {/* existing card UI */}
+ return (
+  <>
+    {loading ? (
+      <div className="w-[95vw] max-w-md rounded-3xl p-7 
+                      bg-gradient-to-br from-zinc-900 via-zinc-950 to-black 
+                      border border-zinc-800 shadow-[0_20px_60px_rgba(0,0,0,0.6)]
+                      animate-pulse">
 
+        <div className="h-4 w-32 bg-zinc-700 rounded mb-4" />
+        <div className="h-10 w-48 bg-zinc-700 rounded mb-8" style={{marginTop:'5px'}}/>
+
+        <div className="flex justify-between items-center mb-6" style={{marginTop:'20px'}}>
+          <div className="w-28 h-28 bg-zinc-800 rounded-full" />
+          <div className="space-y-3">
+            <div className="h-4 w-24 bg-zinc-700 rounded" />
+            <div className="h-6 w-32 bg-zinc-700 rounded" style={{marginTop:'5px'}}/>
+            <div className="h-3 w-20 bg-zinc-700 rounded"style={{marginTop:'5px'}} />
+          </div>
+        </div>
+
+        <div className="h-10 w-full bg-zinc-700 rounded-2xl" style={{marginTop:'20px'}}/>
       </div>
-
-      {/* Balance */}
-      <div className="mb-4">
-        <p className="text-sm text-zinc-400 uppercase">Balance</p>
-        <h3 className="text-3xl  tracking-tight">
-          ₹{monthlyBalance.monthlyBalance}
-        </h3>
-      </div>
-
-      {/* Salary + date */}
-      <div className="mb-6 flex justify-between items-center">
-        <div>
-          <p className="text-sm text-zinc-400">Salary</p>
-          <p className=" text-lg">
-            ₹{data.salary.toLocaleString()}
+    ) : (
+      <div style={{width:'95vw'}} className="relative  max-w-md rounded-3xl p-5 text-white overflow-hidden 
+                      bg-gradient-to-br from-zinc-900 via-zinc-950 to-black 
+                      border border-zinc-800 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+      
+        {/* Add Money Button (Top Right) */}
+        <div className="absolute top-5 right-5 z-20">
+          <AddMoneyButton />
+        </div>
+      
+        {/* Ambient glow */}
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full" />
+        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/20 blur-3xl rounded-full" />
+      
+        {/* Balance */}
+        <div className="mb-8 relative z-10">
+          <p className="text-sm text-zinc-400 uppercase tracking-wider">
+            Available Balance
           </p>
+      
+          <h2 className="text-5xl font-bold mt-3 tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">
+            ₹{monthlyBalance?.monthlyBalance?.toLocaleString()}
+          </h2>
         </div>
-        <div className="text-sm text-zinc-400 flex flex-col items-end">
-          <Calendar size={16} />
-          <span>{today}</span>
+      
+        {/* Circular Spending Indicator */}
+        <div className="flex items-center justify-between mb-6 relative z-10">
+      
+          {/* Ring */}
+          <div className="relative w-28 h-28">
+            <svg className="rotate-[-90deg]" width="100%" height="100%">
+              <circle
+                cx="50%"
+                cy="50%"
+                r={radius}
+                stroke="#27272a"
+                strokeWidth="8"
+                fill="transparent"
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r={radius}
+                stroke="url(#grad)"
+                strokeWidth="8"
+                fill="transparent"
+                strokeDasharray={circumference}
+                strokeDashoffset={offset}
+                strokeLinecap="round"
+                className="transition-all duration-1000 ease-out"
+              />
+              <defs>
+                <linearGradient id="grad">
+                  <stop offset="0%" stopColor="#10b981" />
+                  <stop offset="100%" stopColor="#22d3ee" />
+                </linearGradient>
+              </defs>
+            </svg>
+      
+            <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold">
+              {percentUsed.toFixed(0)}%
+            </div>
+          </div>
+      
+          {/* Stats */}
+          <div className="text-right">
+            <p className="text-sm text-zinc-400">This Month Spent</p>
+            <p className="text-xl font-semibold">
+              ₹{monthlyBalance.monthlyExpenses}
+            </p>
+      
+            <p className="text-xs text-zinc-500 mt-2">
+              of ₹{data.salary.toLocaleString()}
+            </p>
+          </div>
         </div>
-      </div>
-
-      {/* Name + View expenses */}
-      <div className="flex justify-between items-center mt-auto">
-        <div className="flex items-center gap-2">
-          <User size={16} className="text-zinc-400" />
-          <p className="font-semibold">{data?.profile?.name}</p>
-        </div>
-<div className="absolute -bottom-16 -right-16 w-40 h-40 bg-gray-500 rounded-full opacity-10 rotate-45"></div>
-      <div className="absolute -top-20 -left-10 w-56 h-56 bg-gray-500 rounded-full opacity-10 rotate-12"></div>
-   
-        <button style={{cursor:'pointer'}}
+      
+        {/* CTA */}
+        <button style={{display:'flex',gap:'10px'}}
           onClick={() => navigate('/insights')}
-          className="flex items-center gap-1 text-sm  text-emerald-400 rounded p-2 hover:text-emerald-300 transition"
+          className="relative z-10 w-full py-3 text-emerald-400 font-semibold shadow-lg"
         >
-          View expenses <ArrowRight size={14} />
+          View Detailed Insights
+          <ArrowRight/>
         </button>
       </div>
-
-      {/* Decorative shapes */}
-      <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-emerald-500 rounded-full opacity-10 rotate-45"></div>
-      <div className="absolute -top-20 -left-10 w-56 h-56 bg-indigo-500 rounded-full opacity-10 rotate-12"></div>
-    
-       </div>
-  )
+    )}
+  </>
+)
 }

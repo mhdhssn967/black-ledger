@@ -60,7 +60,7 @@ export default function AddMoneyButton() {
 
       {/* 🪟 MODAL */}
       {open && (
-        <div className=" fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4 top-60 " style={{zIndex:'500'}}>
+        <div className=" inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center px-4 top-60 " style={{zIndex:'500',position:'fixed',top:'0px'}}>
           <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-2xl p-5 relative modal-custom">
 
             {/* Close */}
