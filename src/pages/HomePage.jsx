@@ -245,7 +245,7 @@ showSurprise&&popHearts()
 
       
         {/* 🧠 FOREGROUND CONTENT */}
-        <div className="relative z-10 w-full max-w-sm" style={{zIndex:'200'}}>
+        <div className="relative z-10 w-full max-w-sm" >
 
       
           {/* 💰 AMOUNT */}
