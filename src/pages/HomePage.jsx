@@ -14,6 +14,7 @@ import TriangleLoader from '../components/TriangleLoader'
 import SpendingScore from '../components/SpendingScore'
 import { checkSurprise } from '../service/services'
 import confetti from 'canvas-confetti'
+import RecentExpenses from '../components/RecentExpenses'
 
 const MySwal = withReactContent(Swal)
 
@@ -234,16 +235,7 @@ showSurprise&&popHearts()
       {loading&&<TriangleLoader/>}
       
       <div className="relative bg-black text-white flex items-center justify-center px-6 overflow-hidden">
-      <div className='nav'>
-        <img src="/logo.png" alt="" />
-          {/* ⚙ SETTINGS */}
-          <button
-            onClick={() => navigate('/settings')}
-            className="hover:text-white transition"
-          >
-            <SettingsIcon size={22} />
-          </button>
-      </ div>
+      
       <SpendingScore/>
      
         {/* 🔮 BACKGROUND BRANDING */}
@@ -486,7 +478,7 @@ showSurprise&&popHearts()
 </div>
 
 </div>
-
+<RecentExpenses/>
     </div>
     </div>
   

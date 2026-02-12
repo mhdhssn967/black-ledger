@@ -14,7 +14,14 @@ import {
 import TriangleLoader from '../components/TriangleLoader'
 
 export default function ExpenseCharts() {
-  const [monthFilter, setMonthFilter] = useState('')
+
+    const getCurrentMonth = () => {
+  return new Date().toLocaleString('default', {
+    month: 'long',
+    year: 'numeric'
+  })
+}
+  const [monthFilter, setMonthFilter] = useState(getCurrentMonth())
   const USER_ID = useContext(UserContext)
   const navigate = useNavigate()
 
@@ -48,7 +55,7 @@ export default function ExpenseCharts() {
     {loading&&<TriangleLoader/>}
       {/* Back */}
       <button style={{margin:'20px'}}
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/expensebreakdown')}
         className="flex items-center gap-2 text-zinc-400 hover:text-white m-6"
       >
         <ArrowLeft size={18} />

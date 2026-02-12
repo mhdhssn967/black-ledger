@@ -14,7 +14,16 @@ import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context/UserContext'
 import TriangleLoader from '../components/TriangleLoader'
 export default function ExpenseBreakdown() {
-  const [monthFilter, setMonthFilter] = useState('')
+
+  const getCurrentMonth = () => {
+  return new Date().toLocaleString('default', {
+    month: 'long',
+    year: 'numeric'
+  })
+}
+
+
+  const [monthFilter, setMonthFilter] = useState(getCurrentMonth())
   const USER_ID = useContext(UserContext)
   const [loading,setLoading]=useState(true)
   const [summary, setSummary] = useState({
@@ -37,26 +46,63 @@ const navigate = useNavigate()
   }
 function Section({ title, icon: Icon, children }) {
   return (
-    <div className="mb-8">
-      <div className="flex items-center gap-2 mb-3">
-        <Icon className="text-emerald-400" size={20} />
-        <h2 className="text-lg font-semibold">{title}</h2>
+    <div className="mb-10" >
+
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-5" style={{marginTop:'20px'}}>
+        <div className="bg-zinc-800 p-2 rounded-xl">
+          <Icon className="text-emerald-400" size={18} />
+        </div>
+
+        <h2 className="text-lg font-semibold tracking-tight" >
+          {title}
+        </h2>
       </div>
-      <div className="space-y-3">{children}</div>
+
+      {/* Content Container */}
+      <div className="bg-zinc-900/40 border border-zinc-800 rounded-3xl p-4 space-y-4 backdrop-blur-sm"style={{margin:'10px auto 10px auto'}}>
+        {children}
+      </div>
     </div>
   )
 }
-function BreakdownRow({ label, value }) {
+
+function BreakdownRow({ label, value, total=summary.total }) {
+  const percentage = total > 0 ? (value / total) * 100 : 0
+  console.log(total);
+  
+
   return (
-    <div className="flex justify-between items-center bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3"style={{marginBottom:'10px'}}>
-      <p className="font-medium text-white">{label}</p>
-      <p className="flex items-center gap-1 text-emerald-400 font-semibold">
-        <IndianRupee size={16} />
-        {value.toLocaleString()}
-      </p>
+    <div className="bg-zinc-950/70 border border-zinc-800 rounded-2xl px-5 py-4 hover:border-emerald-500/40 transition-all duration-300" style={{margin:'10px auto 10px auto'}}>
+
+      {/* Top Row */}
+      <div className="flex items-center justify-between mb-3">
+
+        <div>
+          <p className="text-sm text-zinc-400">{label}</p>
+          <p className="text-xs text-zinc-500">
+            {percentage.toFixed(1)}%
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 text-emerald-400 font-semibold text-lg">
+          ₹{Number(value).toLocaleString()}
+        </div>
+
+      </div>
+
+      {/* Progress Bar */}
+      <div className="w-full h-2 bg-zinc-800 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-emerald-500 rounded-full transition-all duration-700 ease-out"
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
     </div>
   )
 }
+
 
   return (
     <>
@@ -91,15 +137,33 @@ function BreakdownRow({ label, value }) {
           </div>
         
           {/* Total */}
-          <div className="flex justify-between bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-6"style={{marginTop:'10px',marginBottom:'20px'}}>
-            <div>
-              <p className="text-sm text-zinc-400">Total Spent</p>
-              <h2 className="text-3xl font-extrabold text-emerald-400">
-                ₹{summary.total.toLocaleString()}
-              </h2>
-            </div>
-            <button onClick={()=>navigate('/expensebreakdowncharts')} className='bg-emerald-400 p-4 pt-3 rounded-2xl'><ChartAreaIcon/></button>
-          </div>
+          <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500/10 to-emerald-700/5 border border-emerald-500/20 rounded-3xl p-6 mb-8 backdrop-blur-xl" style={{marginBottom:'20px'}}>
+
+  {/* Glow */}
+  <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-3xl rounded-full" />
+
+  <div className="relative flex justify-between items-center">
+
+    <div>
+      <p className="text-sm text-zinc-400 mb-2 tracking-wide">
+        Total Spent
+      </p>
+
+      <h2 className="text-4xl font-bold text-emerald-400 tracking-tight">
+        ₹{summary.total.toLocaleString()}
+      </h2>
+    </div>
+
+    <button
+      onClick={() => navigate('/expensebreakdowncharts')}
+      className="bg-emerald-500 hover:bg-emerald-600 transition p-4 rounded-2xl shadow-lg"
+    >
+      <ChartAreaIcon size={20} />
+    </button>
+
+  </div>
+</div>
+
         
           {/* ➤ Category Breakdown */}
           <div style={{marginBottom:'10px'}}>

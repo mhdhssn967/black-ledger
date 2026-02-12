@@ -85,9 +85,9 @@ export default function Settings() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-10 font-premium">
+    <div className="min-h-screen bg-black text-white px-6 py-2 font-premium">
 {loading&&<TriangleLoader/>}
-      <div style={{display:'flex',justifyContent:'space-between'}}>
+      <div style={{display:'flex',justifyContent:'space-between',marginBottom:'20px'}}>
         <button
           onClick={() => navigate('/')}
           className="flex items-center gap-2 text-zinc-400 hover:text-white " 

@@ -5,7 +5,7 @@ import {
   deleteDoc,
   updateDoc,
   query,
-  orderBy,where,Timestamp
+  orderBy,where,Timestamp,limit
 } from 'firebase/firestore'
 import { db } from '../../firebaseConfig'
 
@@ -15,7 +15,7 @@ export const fetchExpenses = async (userId) => {
 
   const q = query(
     collection(db, 'users', userId, 'expenses'),
-    orderBy('createdAt', 'desc')
+    orderBy('transactionDate', 'desc')
   )
 
   const snap = await getDocs(q)
@@ -38,7 +38,21 @@ export const updateExpense = async (id, data,userId) => {
     data
   )
 }
+// recent expenses
+export const fetchRecentExpenses = async (userId) => {
+  const q = query(
+    collection(db, 'users', userId, 'expenses'),
+    orderBy('transactionDate', 'desc'),
+    limit(10)
+  )
 
+  const snap = await getDocs(q)
+
+  return snap.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }))
+}
 
 // currentmonth expense
 
