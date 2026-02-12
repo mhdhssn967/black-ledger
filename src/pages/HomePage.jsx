@@ -242,10 +242,10 @@ showSurprise&&popHearts()
         <div className='home-one'>
 
           <div className="home-ui">
-            <span className="text-[25vw] font-extrabold tracking-tight text-white/50" style={{textWrap:'nowrap'}}>
+            <span className="text-[25vw] font-bold mt-3 tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent" style={{textWrap:'nowrap'}}>
               {/* <h3 className="text-[19vw]">Hi</h3> */}
                 {data?.profile?.name}
-                <p style={{fontStyle:'italic',fontWeight:'200',fontSize:'20px',marginTop:'-30px'}}>{data?.profile?.title}</p>
+                <p style={{fontWeight:'200',fontSize:'20px',marginTop:'-20px',fontStyle:'italic',letterSpacing:'-2px'}} className="tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">{data?.profile?.title}</p>
             </span>
             <br />
             {/* <span className="mt-[-2rem] text-xl tracking-widest text-white/80 uppercase">
