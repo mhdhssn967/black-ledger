@@ -86,7 +86,7 @@ const [loading, setLoading] = useState(true)
                       border border-zinc-800 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
       
         {/* Add Money Button (Top Right) */}
-        <div className="absolute top-5 right-5 z-20">
+        <div className="absolute top-5 right-5 ">
           <AddMoneyButton />
         </div>
       
@@ -95,7 +95,7 @@ const [loading, setLoading] = useState(true)
         <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/20 blur-3xl rounded-full" />
       
         {/* Balance */}
-        <div className="mb-8 relative z-10">
+        <div className="mb-8 relative ">
           <p className="text-sm text-zinc-400 uppercase tracking-wider">
             Available Balance
           </p>
@@ -106,7 +106,7 @@ const [loading, setLoading] = useState(true)
         </div>
       
         {/* Circular Spending Indicator */}
-        <div className="flex items-center justify-between mb-6 relative z-10">
+        <div className="flex items-center justify-between mb-6 relative ">
       
           {/* Ring */}
           <div className="relative w-28 h-28">
@@ -159,10 +159,10 @@ const [loading, setLoading] = useState(true)
       
         {/* CTA */}
         <button style={{display:'flex',gap:'10px'}}
-          onClick={() => navigate('/insights')}
-          className="relative z-10 w-full py-3 text-emerald-400 font-semibold shadow-lg"
+          onClick={() => navigate('/expensebreakdown')}
+          className="relative  w-full py-3 text-emerald-400 font-semibold shadow-lg"
         >
-          View Detailed Insights
+          Expense Analysis
           <ArrowRight/>
         </button>
       </div>

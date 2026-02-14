@@ -170,7 +170,7 @@ export default function Settings() {
 
         </Section>
 
-       <div className="relative z-10 max-w-xl mx-auto space-y-10"> <ChipSection
+       <div className="relative z-10 max-w-xl mx-auto space-y-10" style={{margintTop:'20px'}}> <ChipSection
           title="Categories"
           items={data.categories}
           setItems={items =>

@@ -15,7 +15,7 @@ const Insights = () => {
       <button
         onClick={() => navigate('/')}
         className="flex items-center gap-2 text-zinc-400 hover:text-white mb-6"
-        style={{ margin: '30px' }}
+        style={{ margin: '5px auto 20px 10px' }}
       >
         <ArrowLeft size={18} />
         Back

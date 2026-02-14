@@ -245,7 +245,7 @@ showSurprise&&popHearts()
             <span className="text-[25vw] font-bold mt-3 tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent" style={{textWrap:'nowrap'}}>
               {/* <h3 className="text-[19vw]">Hi</h3> */}
                 {data?.profile?.name}
-                <p style={{fontWeight:'200',fontSize:'20px',marginTop:'-20px',fontStyle:'italic',letterSpacing:'-2px'}} className="tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">{data?.profile?.title}</p>
+                <p style={{fontWeight:'200',fontSize:'20px',marginTop:'-35px',fontStyle:'italic',letterSpacing:'-2px'}} className="tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">{data?.profile?.title}</p>
             </span>
             <br />
             {/* <span className="mt-[-2rem] text-xl tracking-widest text-white/80 uppercase">
@@ -436,14 +436,14 @@ showSurprise&&popHearts()
 
       </div>
       
-      <div className="flex justify-center gap-4 mt-6">
+      <div className="flex justify-center gap-4 mt-6" style={{backgroundColor:'red',}}>
   {/* Analysis */}
-  <button
-    onClick={() => navigate('/expensebreakdown')}
+  <button style={{width:'100%'}}
+    onClick={() => navigate('/insights')}
     className="
-      flex items-center gap-3
+      flex items-center gap-1
       rounded-2xl
-      px-8 py-4
+      px-4 py-4
       bg-emerald-400
       text-black
       font-semibold
@@ -452,7 +452,7 @@ showSurprise&&popHearts()
       transition
     "
   >
-    <span>Analysis</span>
+    <span>Transactions</span>
     <span className="text-lg">→</span>
   </button>
 
@@ -460,9 +460,9 @@ showSurprise&&popHearts()
   <button
     onClick={() => navigate('/debts')}
     className="
-      flex items-center gap-3
+      flex items-center gap-1
       rounded-2xl
-      px-8 py-4
+      px-4 py-4
       bg-zinc-900
       text-white
       font-semibold
