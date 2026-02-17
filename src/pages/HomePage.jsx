@@ -436,9 +436,9 @@ showSurprise&&popHearts()
 
       </div>
       
-      <div className="flex justify-center gap-4 mt-6" style={{backgroundColor:'red',}}>
+      <div className="flex justify-center gap-4 mt-6" style={{width:'95%'}}>
   {/* Analysis */}
-  <button style={{width:'100%'}}
+  <button style={{width:'50%'}}
     onClick={() => navigate('/insights')}
     className="
       flex items-center gap-1
@@ -457,7 +457,7 @@ showSurprise&&popHearts()
   </button>
 
   {/* Debts */}
-  <button
+  <button style={{width:'50%',display:'flex',justifyContent:'center'}}
     onClick={() => navigate('/debts')}
     className="
       flex items-center gap-1

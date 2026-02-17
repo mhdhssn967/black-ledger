@@ -86,7 +86,7 @@ const [loading, setLoading] = useState(true)
                       border border-zinc-800 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
       
         {/* Add Money Button (Top Right) */}
-        <div className="absolute top-5 right-5 ">
+        <div className="absolute top-1 right-1 ">
           <AddMoneyButton />
         </div>
       

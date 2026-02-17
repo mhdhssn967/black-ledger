@@ -17,6 +17,13 @@ body{
     gap: 5px;
     align-items: center;
     color: rgb(206, 205, 205);
+    margin-bottom: 10px;
+    background-color: rgb(26, 25, 25);
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid rgb(59, 59, 59) 1px;
 }
 html, body {
   touch-action: manipulation;

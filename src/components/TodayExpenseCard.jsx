@@ -40,6 +40,7 @@ export default function TodayExpenseCard() {
 
   return (
     <div className='today text-sm' ><p className='text-zinc-300'> Today's Spend</p>
+    
       {loading ? (
         <p className="text-zinc-500 ">Calculating…</p>
       ) : (
