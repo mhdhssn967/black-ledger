@@ -162,7 +162,7 @@ export default function ExpenseBreakdown() {
 
         <div
           className="relative overflow-hidden bg-gradient-to-br from-emerald-500/10 to-emerald-700/5 border border-emerald-500/20 rounded-3xl p-6 mb-8 backdrop-blur-xl"
-          style={{ marginBottom: '20px' }}
+          style={{ marginBottom: '10px' }}
         >
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-3xl rounded-full" />
 
@@ -227,7 +227,7 @@ export default function ExpenseBreakdown() {
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 modal-custom">
           <div style={{width:'95%'}} className="bg-zinc-900 w-full max-w-md rounded-2xl p-3 border border-zinc-800 relative max-h-[80vh] overflow-y-auto">
 
             <button

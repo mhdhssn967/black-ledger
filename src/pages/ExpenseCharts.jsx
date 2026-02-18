@@ -62,9 +62,9 @@ export default function ExpenseCharts() {
         Back
       </button>
 
-      <div className="min-h-screen bg-black text-white px-5 pb-10" style={{display:'flex',flexDirection:'column',gap:'30px'}}>
+      <div className="min-h-screen bg-black text-white px-4 pb-10" style={{display:'flex',flexDirection:'column',gap:'30px'}}>
         {/* Header */}
-        <div className="flex justify-between items-center mb-6" style={{margin:'10px'}}>
+        <div className="flex justify-between items-center mb-6" style={{margin:'0px 10px'}}>
           <h1 className="text-xl font-semibold">Expense Analysis</h1>
 
           <select
@@ -82,11 +82,23 @@ export default function ExpenseCharts() {
         </div>
 
         {/* Total */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 mb-8" style={{marginTop:'10px'}}>
-          <p className="text-sm text-zinc-400">Total Spent</p>
-          <h2 className="text-3xl font-extrabold text-emerald-400">
-            ₹{summary.total.toLocaleString()}
-          </h2>
+        <div
+          className="relative overflow-hidden bg-gradient-to-br from-emerald-500/10 to-emerald-700/5 border border-emerald-500/20 rounded-3xl p-6 mb-8 backdrop-blur-xl"
+        
+        >
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-3xl rounded-full" />
+
+          <div className="relative flex justify-between items-center">
+            <div>
+              <p className="text-sm text-zinc-400 mb-2 tracking-wide">
+                Total Spent
+              </p>
+              <h2 className="text-4xl font-bold text-emerald-400 tracking-tight">
+                ₹{summary.total.toLocaleString()}
+              </h2>
+            </div>
+
+          </div>
         </div>
 
         {/* Charts */}
