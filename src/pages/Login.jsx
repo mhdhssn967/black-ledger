@@ -125,6 +125,12 @@ export default function Login() {
 
           Continue with Google
         </button>
+        <p>Test Credentials
+          <ul>
+            <li>test@gmail.com</li>
+            <li>test@123</li>
+          </ul>
+        </p>
 
       </div>
     </div>
