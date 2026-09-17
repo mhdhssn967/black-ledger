@@ -1,81 +1,49 @@
-import { useEffect, useRef } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import { useEffect } from 'react';
+import { Html5QrcodeScanner } from 'html5-qrcode';
+import { X } from 'lucide-react';
 
-const QRScanner = ({ onScanSuccess }) => {
-  const scannerRef = useRef(null);
-  const containerRef = useRef(null);
-  const scannedRef = useRef(false);
-
+const QRScanner = ({ onScanSuccess, onClose }) => {
   useEffect(() => {
-    console.log("[QRScanner] Mounting component");
+    const scanner = new Html5QrcodeScanner(
+      "qr-reader",
+      { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
+      false
+    );
 
-    // Clear any previous injected UI
-    if (containerRef.current) {
-      containerRef.current.innerHTML = "";
-      console.log("[QRScanner] Cleared previous QR container");
-    }
+    const handleScan = (decodedText) => {
+      onScanSuccess(decodedText);
+      scanner.clear();
+    };
 
-    const scanner = new Html5Qrcode("qr-reader");
-    scannerRef.current = scanner;
+    const handleError = (error) => {
+      // Ignored, happens constantly as camera searches
+    };
 
-    console.log("[QRScanner] Starting camera...");
-
-    scanner
-      .start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: 240,
-          disableFlip: true,
-        },
-        (decodedText) => {
-          console.log("[QRScanner] Frame received");
-
-          if (scannedRef.current) {
-            console.log("[QRScanner] Already scanned, ignoring frame");
-            return;
-          }
-
-          console.log("[QRScanner] QR DECODED:", decodedText); // 🔴 Important
-
-          scannedRef.current = true;
-
-          scanner
-            .stop()
-            .then(() => {
-              console.log("[QRScanner] Scanner stopped after successful scan");
-            })
-            .finally(() => {
-              onScanSuccess(decodedText);
-            });
-        }
-      )
-      .then(() => {
-        console.log("[QRScanner] Camera started successfully");
-      })
-      .catch((err) => {
-        console.error("[QRScanner] Camera start error:", err);
-      });
+    scanner.render(handleScan, handleError);
 
     return () => {
-      console.log("[QRScanner] Unmounting component, stopping scanner if needed");
-      scannedRef.current = true;
-      if (scannerRef.current?.isScanning) {
-        scannerRef.current
-          .stop()
-          .then(() => console.log("[QRScanner] Scanner stopped on unmount"))
-          .catch((err) => console.error("[QRScanner] Stop error on unmount:", err));
+      try {
+        scanner.clear();
+      } catch (error) {
+        console.error("Failed to clear html5QrcodeScanner. ", error);
       }
     };
   }, [onScanSuccess]);
 
   return (
-    <div className="flex justify-center">
-      <div
-        ref={containerRef}
-        id="qr-reader"
-        className="w-[260px] h-[260px] rounded-2xl overflow-hidden bg-black"
-      />
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md">
+      <div className="relative w-full max-w-md p-4">
+        <button 
+          onClick={onClose}
+          className="absolute -top-12 right-4 bg-zinc-800 text-white p-2 rounded-full z-50 hover:bg-zinc-700 transition"
+        >
+          <X size={24} />
+        </button>
+        <div className="bg-white p-4 rounded-3xl overflow-hidden shadow-2xl">
+          <div id="qr-reader" className="w-full rounded-2xl overflow-hidden text-black"></div>
+        </div>
+        <p className="text-white/80 text-center mt-8 text-lg">Scan any UPI QR Code to pay</p>
+      </div>
     </div>
   );
 };

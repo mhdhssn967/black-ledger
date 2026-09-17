@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowBigLeft, Settings as SettingsIcon } from 'lucide-react'
+import { ArrowBigLeft, Settings as SettingsIcon, QrCode } from 'lucide-react'
 import CategoryChips from '../components/CategoryChips'
+import QRScanner from '../components/QRScanner'
 import { addTransactionDateToExistingExpenses, saveExpense } from '../service/saveExpense'
 import './HomePage.css'
 import Swal from 'sweetalert2'
@@ -38,6 +39,39 @@ export default function HomePage() {
     remarks: '',
     transactionDate: new Date().toISOString().split('T')[0]
   })
+
+  const [isScanning, setIsScanning] = useState(false)
+  const [scannedUpiUrl, setScannedUpiUrl] = useState('')
+  const [payeeName, setPayeeName] = useState('')
+
+  const handleScanSuccess = (decodedText) => {
+    setIsScanning(false)
+    if (decodedText.startsWith('upi://')) {
+      setScannedUpiUrl(decodedText)
+      try {
+        const url = new URL(decodedText)
+        const searchParams = url.searchParams
+        
+        const pn = searchParams.get('pn')
+        const am = searchParams.get('am')
+        
+        if (pn) {
+          setPayeeName(pn)
+          setExpense(prev => ({ ...prev, context: pn, remarks: `Paid to ${pn}` }))
+        }
+        
+        if (am) {
+          setExpense(prev => ({ ...prev, amount: am }))
+        }
+        setStep('amount')
+      } catch (e) {
+        console.error('Invalid UPI URL format')
+      }
+    } else {
+      setExpense(prev => ({ ...prev, remarks: decodedText }))
+      setStep('amount')
+    }
+  }
 
    const popHearts = (big = false) => {
       confetti({
@@ -103,7 +137,7 @@ export default function HomePage() {
     await saveExpense(expense, userId.userId);
 
     // ✅ Success alert
-    MySwal.fire({
+    await MySwal.fire({
       title: 'Expense Added!',
       html: `
         <div class="text-left">
@@ -121,6 +155,28 @@ export default function HomePage() {
       iconColor: '#10b981'
     });
 
+    if (scannedUpiUrl) {
+      const result = await MySwal.fire({
+        title: 'Open Payment App?',
+        text: `Proceed to pay ${payeeName ? payeeName : 'the merchant'} ₹${expense.amount}`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Pay Now',
+        cancelButtonText: 'Later',
+        background: '#111827',
+        color: '#fff',
+        confirmButtonColor: '#10b981'
+      });
+
+      if (result.isConfirmed) {
+        let finalUrl = scannedUpiUrl;
+        if (!finalUrl.includes('am=')) {
+          finalUrl += `&am=${expense.amount}`;
+        }
+        window.location.href = finalUrl;
+      }
+    }
+
     // 🔄 Reset UI
     setExpense({
       amount: '',
@@ -131,6 +187,8 @@ export default function HomePage() {
       transactionDate: new Date().toISOString().split('T')[0]
     });
     setStep('amount');
+    setScannedUpiUrl('');
+    setPayeeName('');
 
   } catch (error) {
     // ❌ Error handling
@@ -241,16 +299,17 @@ showSurprise&&popHearts()
         {/* 🔮 BACKGROUND BRANDING */}
         <div className='home-one'>
 
-          <div className="home-ui">
-            <span className="text-[25vw] font-bold mt-3 tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent" style={{textWrap:'nowrap'}}>
-              {/* <h3 className="text-[19vw]">Hi</h3> */}
-                {data?.profile?.name}
-                <p style={{fontWeight:'200',fontSize:'20px',marginTop:'-35px',fontStyle:'italic',letterSpacing:'-2px'}} className="tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">{data?.profile?.title}</p>
-            </span>
-            <br />
-            {/* <span className="mt-[-2rem] text-xl tracking-widest text-white/80 uppercase">
-               Manage all your expenses at ease
-            </span> */}
+          <div className="home-ui flex flex-col items-center justify-center py-6">
+            <button 
+              onClick={() => setIsScanning(true)}
+              className="group relative flex flex-col items-center justify-center p-8 bg-zinc-900/80 rounded-3xl border border-zinc-800 shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-emerald-900/30 hover:border-emerald-500/50"
+            >
+              <div className="absolute inset-0 bg-emerald-500/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <QrCode size={80} className="text-emerald-400 mb-4 animate-pulse group-hover:animate-none" />
+              <span className="text-xl font-medium tracking-wide bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">
+                Scan to Pay
+              </span>
+            </button>
           </div>
 
 
@@ -479,6 +538,12 @@ showSurprise&&popHearts()
 
 </div>
 <RecentExpenses/>
+    {isScanning && (
+      <QRScanner 
+        onScanSuccess={handleScanSuccess} 
+        onClose={() => setIsScanning(false)} 
+      />
+    )}
     </div>
     </div>
   
