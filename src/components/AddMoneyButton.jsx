@@ -35,27 +35,14 @@ export default function AddMoneyButton() {
 
   return (
     <>
-      {/* ➕ ROUND BUTTON */}
-      <button
-        onClick={() => setOpen(true)}
-        className="
-          absolute
-          top-4
-          right-4
-          w-9
-          h-9
-          rounded-full
-          bg-emerald-500
-          text-black
-          flex
-          items-center
-          justify-center
-          hover:bg-emerald-400
-          transition
-        "
-        title="Add money"
+      <button 
+        onClick={() => setOpen(true)} 
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px 16px', backgroundColor: '#18181b', borderRadius: '24px', border: '1px solid rgba(16, 185, 129, 0.3)', cursor: 'pointer', outline: 'none', width: '100%' }}
       >
-        <Plus size={18} />
+        <div style={{ width: '48px', height: '48px', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+           <Plus size={24} color="#34d399" />
+        </div>
+        <span style={{ fontWeight: '600', fontSize: '13px', color: '#fff' }}>Add Money</span>
       </button>
 
       {/* 🪟 MODAL */}

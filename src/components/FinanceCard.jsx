@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { CreditCard, Wifi, Calendar, User, ArrowRight } from 'lucide-react'
+import { ArrowRight, Wallet } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getFinanceSummary, getMonthlyBalance } from '../service/getFinanceSummary'
 import { UserContext } from '../context/UserContext'
@@ -9,15 +9,13 @@ export default function FinanceCard() {
   const navigate = useNavigate()
   const userId = useContext(UserContext)
 
-  const [monthlyBalance, setMonthlyBalance] = useState(0)
-const [loading, setLoading] = useState(true)
+  const [monthlyBalance, setMonthlyBalance] = useState({ monthlyBalance: 0, monthlyExpenses: 0 })
+  const [loading, setLoading] = useState(true)
   
   const [data, setData] = useState({
     salary: 0,
-    monthlyExpenses: 0 // 👈 IMPORTANT: must come from backend
+    monthlyExpenses: 0
   })
-  
-
 
   useEffect(() => {
     const loadData = async () => {
@@ -26,147 +24,94 @@ const [loading, setLoading] = useState(true)
         setData(summary)
 
         const monthBalanceRef = await getMonthlyBalance(userId.userId)
-        setMonthlyBalance(monthBalanceRef)
+        setMonthlyBalance(monthBalanceRef || { monthlyBalance: 0, monthlyExpenses: 0 })
+
+        setLoading(false)
       }
     }
     loadData()
   }, [userId])
 
-  useEffect(() => {
-  const loadData = async () => {
-    if (userId.userId) {
-      const summary = await getFinanceSummary(userId.userId)
-      setData(summary)
-
-      const monthBalanceRef = await getMonthlyBalance(userId.userId)
-      setMonthlyBalance(monthBalanceRef)
-
-      setLoading(false) // 👈 important
-    }
-  }
-  loadData()
-}, [userId])
-
-
-  // ✅ Correct percentage calculation
-  const percentUsed =
-    data.salary > 0
-      ? Math.min((monthlyBalance.monthlyExpenses / data.salary) * 100, 100)
-      : 0
-
-  const radius = 42
-  const circumference = 2 * Math.PI * radius
-  const offset = circumference - (percentUsed / 100) * circumference
+  const percentUsed = data.salary > 0
+    ? Math.min((monthlyBalance.monthlyExpenses / data.salary) * 100, 100)
+    : 0
 
  return (
   <>
     {loading ? (
-      <div className="w-[95vw] max-w-md rounded-3xl p-7 
-                      bg-gradient-to-br from-zinc-900 via-zinc-950 to-black 
-                      border border-zinc-800 shadow-[0_20px_60px_rgba(0,0,0,0.6)]
-                      animate-pulse">
-
-        <div className="h-4 w-32 bg-zinc-700 rounded mb-4" />
-        <div className="h-10 w-48 bg-zinc-700 rounded mb-8" style={{marginTop:'5px'}}/>
-
-        <div className="flex justify-between items-center mb-6" style={{marginTop:'20px'}}>
-          <div className="w-28 h-28 bg-zinc-800 rounded-full" />
-          <div className="space-y-3">
-            <div className="h-4 w-24 bg-zinc-700 rounded" />
-            <div className="h-6 w-32 bg-zinc-700 rounded" style={{marginTop:'5px'}}/>
-            <div className="h-3 w-20 bg-zinc-700 rounded"style={{marginTop:'5px'}} />
-          </div>
+      <div 
+        style={{ width: '100%', padding: '24px', borderRadius: '24px', marginBottom: '24px', backgroundColor: '#18181b', border: '1px solid #27272a' }}
+        className="animate-pulse"
+      >
+        <div style={{ height: '16px', width: '120px', backgroundColor: '#3f3f46', borderRadius: '4px', marginBottom: '16px' }} />
+        <div style={{ height: '40px', width: '200px', backgroundColor: '#3f3f46', borderRadius: '8px', marginBottom: '32px' }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ height: '24px', width: '100px', backgroundColor: '#3f3f46', borderRadius: '4px' }} />
+          <div style={{ height: '24px', width: '80px', backgroundColor: '#3f3f46', borderRadius: '4px' }} />
         </div>
-
-        <div className="h-10 w-full bg-zinc-700 rounded-2xl" style={{marginTop:'20px'}}/>
       </div>
     ) : (
-      <div style={{width:'95vw'}} className="relative  max-w-md rounded-3xl p-5 text-white overflow-hidden 
-                      bg-gradient-to-br from-zinc-900 via-zinc-950 to-black 
-                      border border-zinc-800 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-      
-        {/* Add Money Button (Top Right) */}
-        <div className="absolute top-1 right-1 ">
-          <AddMoneyButton />
-        </div>
+      <div style={{ 
+        width: '100%', 
+        padding: '16px 20px', 
+        borderRadius: '20px', 
+        marginBottom: '20px',
+        background: 'linear-gradient(135deg, #09090b 0%, #064e3b 100%)',
+        border: '1px solid rgba(16, 185, 129, 0.2)',
+        boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
       
         {/* Ambient glow */}
-        <div className="absolute -top-24 -right-24 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full" />
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/20 blur-3xl rounded-full" />
+        <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'rgba(16,185,129,0.15)', filter: 'blur(40px)', borderRadius: '50%' }} />
       
-        {/* Balance */}
-        <div className="mb-8 relative ">
-          <p className="text-sm text-zinc-400 uppercase tracking-wider">
-            Available Balance
-          </p>
-      
-          <h2 className="text-5xl font-bold mt-3 tracking-tight bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">
-            ₹{monthlyBalance?.monthlyBalance?.toLocaleString()}
-          </h2>
-        </div>
-      
-        {/* Circular Spending Indicator */}
-        <div className="flex items-center justify-between mb-6 relative ">
-      
-          {/* Ring */}
-          <div className="relative w-28 h-28">
-            <svg className="rotate-[-90deg]" width="100%" height="100%">
-              <circle
-                cx="50%"
-                cy="50%"
-                r={radius}
-                stroke="#27272a"
-                strokeWidth="8"
-                fill="transparent"
-              />
-              <circle
-                cx="50%"
-                cy="50%"
-                r={radius}
-                stroke="url(#grad)"
-                strokeWidth="8"
-                fill="transparent"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                strokeLinecap="round"
-                className="transition-all duration-1000 ease-out"
-              />
-              <defs>
-                <linearGradient id="grad">
-                  <stop offset="0%" stopColor="#10b981" />
-                  <stop offset="100%" stopColor="#22d3ee" />
-                </linearGradient>
-              </defs>
-            </svg>
-      
-            <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold">
-              {percentUsed.toFixed(0)}%
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+              <Wallet size={14} color="#a1a1aa" />
+              <p style={{ fontSize: '11px', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600', margin: 0 }}>
+                Available Balance
+              </p>
             </div>
-          </div>
-      
-          {/* Stats */}
-          <div className="text-right">
-            <p className="text-sm text-zinc-400">This Month Spent</p>
-            <p className="text-xl font-semibold">
-              ₹{monthlyBalance.monthlyExpenses}
-            </p>
-      
-            <p className="text-xs text-zinc-500 mt-2">
-              of ₹{data.salary.toLocaleString()}
-            </p>
+            <h2 style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-1px', color: '#fff', margin: '0' }}>
+              ₹{monthlyBalance?.monthlyBalance?.toLocaleString()}
+            </h2>
           </div>
         </div>
       
-        {/* CTA */}
-        <button style={{display:'flex',gap:'10px'}}
-          onClick={() => navigate('/expensebreakdown')}
-          className="relative  w-full py-3 text-emerald-400 font-semibold shadow-lg"
-        >
-          Expense Analysis
-          <ArrowRight/>
-        </button>
+        {/* Simplified Stats row */}
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          paddingTop: '12px',
+          borderTop: '1px solid rgba(255,255,255,0.1)'
+        }}>
+          <div>
+            <p style={{ fontSize: '11px', color: '#a1a1aa', marginBottom: '2px', margin: 0 }}>Spent this month</p>
+            <p style={{ fontSize: '16px', fontWeight: '700', color: '#fff', margin: '0' }}>
+              ₹{monthlyBalance.monthlyExpenses?.toLocaleString()}
+              <span style={{ fontSize: '11px', color: '#71717a', fontWeight: 'normal', marginLeft: '6px' }}>
+                of ₹{data.salary.toLocaleString()}
+              </span>
+            </p>
+          </div>
+          
+          <button 
+            style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#34d399', fontWeight: '600', fontSize: '12px', background: 'none', border: 'none', padding: '0', cursor: 'pointer' }}
+            onClick={() => navigate('/expensebreakdown')}
+          >
+            Analysis <ArrowRight size={14} />
+          </button>
+        </div>
+        
+        {/* Simple Progress Bar */}
+        <div style={{ width: '100%', height: '4px', backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: '10px', marginTop: '12px', overflow: 'hidden' }}>
+          <div style={{ width: `${percentUsed}%`, height: '100%', backgroundColor: '#10b981', borderRadius: '10px' }} />
+        </div>
       </div>
     )}
   </>
-)
+ )
 }

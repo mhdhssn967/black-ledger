@@ -1,0 +1,39 @@
+#qr-reader {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+#qr-reader video {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Hide the default html5qrcode UI elements if using Html5QrcodeScanner (though we are using Html5Qrcode directly, but just in case) */
+#qr-reader__dashboard_section_csr, 
+#qr-reader__dashboard_section_swaplink,
+#qr-reader__header_message {
+  display: none !important;
+}
+
+/* Hide the shaded region borders if any */
+#qr-shaded-region > div {
+  border-color: transparent !important;
+  display: none !important;
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: 1; }
+  45% { transform: translateY(280px); opacity: 1; }
+  50% { transform: translateY(280px); opacity: 0; }
+  55% { transform: translateY(280px); opacity: 0; }
+  60% { opacity: 1; }
+  95% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+.animate-scan-line {
+  animation: scan-line 3s linear infinite;
+}

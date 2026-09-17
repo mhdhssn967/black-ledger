@@ -1,37 +1,4 @@
-.home-ui{
-    margin-top: 40px;
-    /* position: fixed; */
-    padding: 20px;
-    z-index: 1;
-    opacity: 0.8;
-  height: 180px;
-}
-.home-one{
-    display:'flex';
-    flex-direction: column;
-}
-.home-bottom{
-    /* position: fixed;
-    bottom: 10px; */
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    z-index: 200;
-}
-.nav{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    align-items: center;
-}
-
-.nav img{
-    width: 100px;
-}
-
+/* CSS for HomePage - legacy layout classes removed */
 
 /* 🎂 Birthday Mode Wrapper */
 /* .birthday-mode {
